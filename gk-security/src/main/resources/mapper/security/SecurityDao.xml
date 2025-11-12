@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gk.security.dao.SecurityDao">
+
+    <select id="findByUsername" resultType="com.gk.security.entity.SysUser">
+        SELECT u.id AS id, u.username AS username, u.`password` as 'password', u.dept_id as 'deptId', u.email,
+        u.tenant_id as 'tenantId', u.avatar as 'avatar', u.super_admin as 'superAdmin', u.`status` as 'status'
+        FROM sys_user AS u
+        WHERE u.username = #{username}
+    </select>
+
+    <select id="findByEmail" resultType="com.gk.security.entity.SysUser">
+        SELECT u.id AS id, u.username AS username, u.`password` as 'password', u.dept_id as 'deptId', u.email,
+        u.tenant_id as 'tenantId', u.avatar as 'avatar', u.super_admin as 'superAdmin', u.`status` as 'status'
+        FROM sys_user AS u
+        WHERE u.email = #{email}
+    </select>
+
+    <select id="existsByUsername" resultType="java.lang.Boolean">
+        SELECT COUNT(1) > 0 FROM sys_user WHERE username = #{username}
+    </select>
+
+    <select id="existsByEmail" resultType="java.lang.Boolean">
+        SELECT COUNT(1) > 0 FROM sys_user WHERE email = #{email}
+    </select>
+</mapper>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gk.system.dao.SysWhitelistDao">
+
+    <resultMap type="com.gk.system.entity.SysWhitelistEntity" id="whitelistMap">
+        <result property="id" column="id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="tenantId" column="tenant_id"/>
+        <result property="allowIp" column="allow_ip"/>
+        <result property="ipSource" column="ip_source"/>
+        <result property="remark" column="remark"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <select id="getList" resultMap="whitelistMap">
+        select * from sys_whitelist
+         where 1=1
+        <if test="tenantId">
+            and tenant_id = #{tenantId}
+        </if>
+         <if test="input">
+             and (allow_ip = #{input} or remark like concat("%", #{input}, "%"))
+         </if>
+    </select>
+</mapper>

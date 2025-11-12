@@ -1,0 +1,27 @@
+server:
+  port: 8080
+
+# Eureka ????
+eureka:
+  client:
+    enabled: false
+    register-with-eureka: false
+    fetch-registry: false
+
+# Gateway ????
+spring:
+  application:
+    name: gk-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: gk-system
+              uri: http://127.0.0.1:91
+              predicates:
+                - Path=/admin/**
+              filters:
+                - name: StripPrefix
+                  args:
+                    parts: 1
