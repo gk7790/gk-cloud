@@ -86,7 +86,7 @@ public class SysPostController {
     @DeleteMapping
     @Operation(summary = "删除")
     @RequiresPermission("sys:post:delete")
-    public R<?> delete(@RequestBody Long[] ids){
+    public R<?> delete(@RequestParam Long[] ids){
         //效验数据
         AssertUtils.isArrayEmpty(ids, "id");
         sysPostService.delete(ids);

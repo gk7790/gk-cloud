@@ -8,8 +8,8 @@ public class RedisKeys {
     /**
      * 系统参数Key
      */
-    public static String getSysParamsKey(){
-        return "sys:params";
+    public static String getSysParamsKey(String key){
+        return "sys:params:" + key;
     }
 
     /**

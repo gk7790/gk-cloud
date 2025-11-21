@@ -1,14 +1,18 @@
 package com.gk.system.web;
 
 
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import com.gk.common.annotation.RequiresPermission;
 import com.gk.common.enums.SysEnum;
 import com.gk.common.exception.ErrorCode;
 import com.gk.common.handler.LoginUser;
 import com.gk.common.handler.UserUtils;
 import com.gk.common.tools.R;
+import com.gk.common.utils.ConvertUtils;
 import com.gk.common.validator.AssertUtils;
 import com.gk.system.dto.SysMenuDTO;
+import com.gk.system.entity.SysMenuEntity;
 import com.gk.system.service.SysMenuService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -64,12 +68,22 @@ public class SysMenuController {
 		return R.ok(data);
 	}
 
+    @PutMapping("{id}")
+    @Operation(summary = "信息")
+    @RequiresPermission("sys:menu:info")
+    public R<?> updateById(@PathVariable("id") Long id, @RequestBody SysMenuDTO dto){
+        dto.setId(id);
+        sysMenuService.update(dto);
+        return R.ok();
+    }
+
 	@PostMapping
 	@Operation(summary = "保存")
 	@RequiresPermission("sys:menu:save")
 	public R<?> save(@RequestBody SysMenuDTO dto){
+        SysMenuEntity entity = ConvertUtils.sourceToTarget(dto, SysMenuEntity.class);
 		//效验数据
-		sysMenuService.save(dto);
+		sysMenuService.addMenu(entity);
 		return R.ok();
 	}
 

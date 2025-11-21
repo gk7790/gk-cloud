@@ -28,10 +28,18 @@ public class SysDeptEntity extends SimpleEntity {
 	 * 部门名称
 	 */
 	private String name;
+    /**
+     * 状态
+     */
+    private Integer status;
 	/**
 	 * 排序
 	 */
 	private Integer sort;
+    /**
+     * 备注
+     */
+    private String remark;
 	/**
 	 * 上级部门名称
 	 */

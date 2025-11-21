@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.gk.common.core.entity.BaseEntity;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -28,6 +29,10 @@ public class SysRoleEntity extends BaseEntity {
 	 * 备注
 	 */
 	private String remark;
+    /**
+     * 状态
+     */
+    private Integer status;
 	/**
 	 * 部门ID
 	 */

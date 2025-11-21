@@ -26,52 +26,38 @@ public class SysMenuDTO extends TreeNode<SysMenuDTO> implements Serializable {
 	@Schema(title = "上级ID")
 	private Long pid;
 
-	@Schema(title = "菜单名称")
+    @Schema(title = "租户id")
+    private Long tenantId;
+
+    @Schema(title = "菜单名称")
 	private String name;
 
-	@Schema(title = "菜单URL")
-	private String url;
+    @Schema(title = "类型")
+	private String type;
 
-	@Schema(title = "类型  0：菜单   1：按钮")
-	private Integer menuType;
+    @Schema(title = "地址栏路径")
+    private String path;
 
-	@Schema(title = "打开方式   0：内部   1：外部")
-	private Integer openStyle;
-
-	@Schema(title = "菜单图标")
-	private String icon;
-
-	@Schema(title = "授权(多个用逗号分隔，如：sys:user:list,sys:user:save)")
+    @Schema(title = "授权(多个用逗号分隔，如：sys:user:list,sys:user:save)")
 	private String authCode;
 
-	@Schema(title = "排序")
+    @Schema(title = "排序")
 	private Integer sort;
 
-	@Schema(title = "创建时间")
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	private LocalDateTime createdAt;
-
-	@Schema(title = "上级菜单名称")
+    @Schema(title = "上级菜单名称")
 	private String parentName;
 
-	@Override
-	public Long getId() {
-		return id;
-	}
+    @Schema(title = "状态")
+    private Integer status;
 
-	@Override
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @Schema(title = "激活路径")
+    private String activePath;
 
-	@Override
-	public Long getPid() {
-		return pid;
-	}
+    @Schema(title = "组件路径")
+    private String component;
 
-	@Override
-	public void setPid(Long pid) {
-		this.pid = pid;
-	}
-
+    /**
+     * 样式
+     */
+    private SysMenuMeta meta;
 }

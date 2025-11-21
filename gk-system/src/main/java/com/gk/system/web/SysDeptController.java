@@ -1,5 +1,8 @@
 package com.gk.system.web;
 
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import com.gk.common.annotation.RequiresPermission;
 import com.gk.common.tools.R;
 import com.gk.common.validator.AssertUtils;
@@ -33,14 +36,6 @@ public class SysDeptController {
         return R.ok(list);
     }
 
-    @GetMapping("{id}")
-    @Operation(summary = "信息")
-    @RequiresPermission("sys:dept:info")
-    public R<?> get(@PathVariable("id") Long id) {
-        SysDeptDTO data = sysDeptService.get(id);
-        return R.ok(data);
-    }
-
     @PostMapping
     @Operation(summary = "保存")
     @RequiresPermission("sys:dept:save")
@@ -50,10 +45,11 @@ public class SysDeptController {
         return R.ok();
     }
 
-    @PutMapping
+    @PutMapping("{id}")
     @Operation(summary = "修改")
     @RequiresPermission("sys:dept:update")
-    public R<?> update(@RequestBody SysDeptDTO dto) {
+    public R<?> update(@PathVariable("id") Long id, @RequestBody SysDeptDTO dto) {
+        dto.setId(id);
         //效验数据
         sysDeptService.update(dto);
         return R.ok();

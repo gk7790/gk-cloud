@@ -19,7 +19,7 @@ public interface SysMenuService extends BaseService<SysMenuEntity> {
 
 	SysMenuDTO get(Long id);
 
-	void save(SysMenuDTO dto);
+	void addMenu(SysMenuEntity dto);
 
 	void update(SysMenuDTO dto);
 

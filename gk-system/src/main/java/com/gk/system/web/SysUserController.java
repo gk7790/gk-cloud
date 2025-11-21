@@ -11,9 +11,7 @@ import com.gk.common.page.PageData;
 import com.gk.common.password.PasswordUtils;
 import com.gk.common.tools.DataMap;
 import com.gk.common.tools.R;
-import com.gk.common.utils.ConvertUtils;
 import com.gk.common.validator.AssertUtils;
-import com.gk.security.utils.SecurityUtils;
 import com.gk.system.dto.PasswordDTO;
 import com.gk.system.dto.SysUserDTO;
 import com.gk.system.entity.SysUserEntity;
@@ -26,7 +24,6 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.security.SecurityUtil;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -86,12 +83,23 @@ public class SysUserController {
 	@GetMapping("info")
 	@Operation(summary = "登录用户信息")
 	public R<?> info(){
-        Long userId = SecurityUtils.getUserId();
+        Long userId = 0L;
         SysUserDTO data = sysUserService.get(userId);
 		return R.ok(data);
 	}
 
-	@PutMapping("password")
+    @PutMapping("reset-password/{id}")
+    @Operation(summary = "修改密码")
+    public R<?> resetPassword(@PathVariable("id") Long id, @RequestBody SysUserDTO dto){
+        //效验数据
+        AssertUtils.isNull(id, "id");
+        AssertUtils.isBlank(dto.getPassword(), "password");
+        sysUserService.updatePassword(id, dto.getPassword());
+
+        return R.ok();
+    }
+
+    @PutMapping("password")
 	@Operation(summary = "修改密码")
 	public R<?> password(@RequestBody PasswordDTO dto){
 
@@ -131,7 +139,7 @@ public class SysUserController {
 	@DeleteMapping
 	@Operation(summary = "删除")
 	@RequiresPermission("sys:user:delete")
-	public R<?> delete(@RequestBody Long[] ids){
+	public R<?> delete(@RequestParam Long[] ids){
 		//效验数据
 		AssertUtils.isArrayEmpty(ids, "id");
 

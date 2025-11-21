@@ -3,6 +3,22 @@
 
 <mapper namespace="com.gk.system.dao.SysMenuDao">
 
+    <resultMap id="SysMenuResultMap" type="com.gk.system.entity.SysMenuEntity">
+        <id property="id" column="id"/>
+        <result property="pid" column="pid"/>
+        <result property="tenantId" column="tenant_id"/>
+        <result property="name" column="name"/>
+        <result property="path" column="path"/>
+        <result property="type" column="type"/>
+        <result property="status" column="status"/>
+        <result property="activePath" column="active_path"/>
+        <result property="authCode" column="auth_code"/>
+        <result property="component" column="component"/>
+        <result property="sort" column="sort"/>
+        <!-- 关键：meta 字段加 typeHandler -->
+        <result property="meta" column="meta" typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
+    </resultMap>
+
 	<select id="getById" resultType="com.gk.system.entity.SysMenuEntity">
 		select t1.*,
 		(select lang.field_value from sys_language lang where lang.table_name='sys_menu' and lang.field_name='name'
@@ -13,13 +29,12 @@
 		where t1.id = #{id}
 	</select>
 
-	<select id="getMenuList" resultType="com.gk.system.entity.SysMenuEntity">
-		select t1.*, (select lang.field_value from sys_language lang where lang.table_name='sys_menu' and lang.field_name='name'
-		and lang.table_id=t1.id and lang.language=#{language}) as name
+	<select id="getMenuList" resultMap="SysMenuResultMap">
+		select t1.*
 	  	from sys_menu t1
 		<where>
-			<if test="menuType != null">
-				t1.menu_type = #{menuType}
+			<if test="type != null">
+				t1.type = #{type}
 			</if>
 		</where>
 		order by t1.sort asc

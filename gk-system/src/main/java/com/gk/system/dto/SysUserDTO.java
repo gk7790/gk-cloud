@@ -19,15 +19,17 @@ import java.util.List;
 public class SysUserDTO implements Serializable {
 
 	private Long id;
-	private String username;
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Long tenantId;
+    private Long deptId;
+    private String username;
+    private String nickname;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
-	private String realName;
-	private String headUrl;
-	private Integer gender;
-	private String email;
-	private String mobile;
-	private Long deptId;
+    private String realName;
+    private String avatar;
+    private Integer gender;
+    private String email;
+    private String mobile;
 	private Integer status;
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private LocalDateTime createdAt;

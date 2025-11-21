@@ -1,5 +1,6 @@
 package com.gk.common.tools;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -26,5 +27,6 @@ public class TreeNode<T> implements Serializable {
     /**
      * 子节点列表
      */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<T> children = new ArrayList<>();
 }

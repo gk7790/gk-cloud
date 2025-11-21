@@ -33,15 +33,17 @@ import java.util.Map;
  */
 @Service
 public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntity> implements SysUserService {
-	@Autowired
-    private SysRoleUserService sysRoleUserService;
-    @Autowired
-	private SysDeptService sysDeptService;
-    @Autowired
-	private SysUserPostService sysUserPostService;
+    private final SysRoleUserService sysRoleUserService;
+	private final SysDeptService sysDeptService;
+	private final SysUserPostService sysUserPostService;
+    private final SecurityUtils securityUtils;
 
-    protected SysUserServiceImpl(SysUserDao baseDao) {
+    protected SysUserServiceImpl(SysUserDao baseDao, SysRoleUserService sysRoleUserService, SysDeptService sysDeptService, SysUserPostService sysUserPostService, SecurityUtils securityUtils) {
         super(baseDao);
+        this.sysRoleUserService = sysRoleUserService;
+        this.sysDeptService = sysDeptService;
+        this.sysUserPostService = sysUserPostService;
+        this.securityUtils = securityUtils;
     }
 
     @Override
@@ -53,7 +55,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
 		IPage<SysUserEntity> page = getPage(params, "t1.created_at", false);
 
         //普通管理员，只能查询所属部门及子部门的数据
-        SysUser user = SecurityUtils.getCurrentUser();
+        SysUser user = securityUtils.getCurrentUser();
         if (user.getSuperAdmin() == SysEnum.sAdmin.NO.value()) {
             params.put("deptIdList", sysDeptService.getSubDeptIdList(user.getDeptId()));
 			params.put("selfId", user.getId());
@@ -68,7 +70,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
 	@Override
 	public List<SysUserDTO> list(Map<String, Object> params) {
 		//普通管理员，只能查询所属部门及子部门的数据
-        SysUser user = SecurityUtils.getCurrentUser();
+        SysUser user = securityUtils.getCurrentUser();
         if (user.getSuperAdmin() == SysEnum.sAdmin.NO.value()) {
             params.put("deptIdList", sysDeptService.getSubDeptIdList(user.getDeptId()));
             params.put("selfId", user.getId());
@@ -139,7 +141,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
 	@Transactional(rollbackFor = Exception.class)
 	public void updateUserInfo(SysUserDTO dto) {
 		SysUserEntity entity = selectById(dto.getId());
-		entity.setHeadUrl(dto.getHeadUrl());
+		entity.setAvatar(dto.getAvatar());
 		entity.setRealName(dto.getRealName());
 		entity.setGender(dto.getGender());
 		entity.setMobile(dto.getMobile());

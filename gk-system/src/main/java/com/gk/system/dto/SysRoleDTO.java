@@ -27,6 +27,9 @@ public class SysRoleDTO implements Serializable {
 	@Schema(title = "部门名称")
 	private String deptName;
 
+    @Schema(title = "状态")
+    private Integer status;
+
 	@Schema(title = "备注")
 	private String remark;
 

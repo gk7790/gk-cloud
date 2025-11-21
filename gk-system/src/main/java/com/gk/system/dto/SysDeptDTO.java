@@ -32,12 +32,17 @@ public class SysDeptDTO extends TreeNode implements Serializable {
 	@Schema(title = "排序")
 	private Integer sort;
 
+    @Schema(title = "状态")
+    private Integer status;
+
 	@Schema(title = "创建时间")
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private LocalDateTime createdAt;
 
 	@Schema(title = "上级部门名称")
 	private String parentName;
+
+    private String remark;
 
 	@Override
 	public Long getId() {

@@ -79,7 +79,7 @@ public class ScheduleJobController {
     @DeleteMapping
     @Operation(summary = "删除")
     @RequiresPermission("sys:schedule:delete")
-    public R delete(@RequestBody Long[] ids) {
+    public R delete(@RequestParam Long[] ids) {
         scheduleJobService.deleteBatch(ids);
         return R.ok();
     }

@@ -81,6 +81,11 @@ public abstract class CrudServiceImpl<M extends BaseMapper<T>, T, D> extends Bas
     }
 
     @Override
+    public void delete(Long id) {
+        baseDao.deleteById(id);
+    }
+
+    @Override
     public List<T> list(Wrapper<T> queryWrapper){
         return baseDao.selectList(queryWrapper);
     }

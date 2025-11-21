@@ -1,5 +1,9 @@
 package com.gk.common.constant;
 
+import lombok.Getter;
+
+import java.util.List;
+
 /**
  * 常量
  *
@@ -115,6 +119,28 @@ public interface Constant {
      * 调查订单通知配置
      */
     String SURVEY_ORDER_NOTICE_CONFIG = "SURVEY_ORDER_NOTICE_CONFIG";
+
+    /**
+     * 会员人设状态
+     */
+    @Getter
+    enum Status {
+        NORMAL(1, "正常"),
+        PAUSE(2, "暂停"),
+        STOP(3, "停用");
+
+        private final int status;
+        private final String label;
+
+        Status(int status, String label) {
+            this.status = status;
+            this.label = label;
+        }
+
+        public static List<Integer> defaultStatus() {
+            return List.of(NORMAL.status, PAUSE.status);
+        }
+    }
 
     /**
      * 定时任务状态

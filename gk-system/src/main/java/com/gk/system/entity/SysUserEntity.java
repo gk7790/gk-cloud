@@ -1,27 +1,32 @@
 package com.gk.system.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.gk.common.core.entity.BaseEntity;
+import com.gk.common.core.entity.SimpleEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import java.time.LocalDateTime;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
 @TableName("sys_user")
-public class SysUserEntity extends BaseEntity {
+public class SysUserEntity extends SimpleEntity {
 
     /**
      * 部门ID
      */
     private Long deptId;
     /**
+     * 租户id
+     */
+    private Long tenantId;
+    /**
      * 用户名
      */
     private String username;
+    /**
+     * 昵称
+     */
+    private String nickname;
     /**
      * 密码
      */
@@ -33,7 +38,7 @@ public class SysUserEntity extends BaseEntity {
     /**
      * 头像
      */
-    private String headUrl;
+    private String avatar;
     /**
      * 性别   0：男   1：女    2：保密
      */
@@ -66,16 +71,6 @@ public class SysUserEntity extends BaseEntity {
      * 验证器秘钥
      */
     private String authSecret;
-    /**
-     * 更新者
-     */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Long updatedBy;
-    /**
-     * 更新时间
-     */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updatedAt;
     /**
      * 部门名称
      */

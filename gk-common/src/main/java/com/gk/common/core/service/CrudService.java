@@ -25,6 +25,8 @@ public interface CrudService<T, D> extends BaseService<T> {
 
     void delete(Long[] ids);
 
+    void delete(Long id);
+
     List<T> list(Wrapper<T> queryWrapper);
 
 }

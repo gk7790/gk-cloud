@@ -37,4 +37,7 @@ public class SysUser implements UserDetails {
         return username;
     }
 
+    public boolean isSuperAdmin() {
+        return superAdmin == 1;
+    }
 }

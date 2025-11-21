@@ -4,6 +4,7 @@ package com.gk.system.web;
 import com.gk.common.annotation.RequestMap;
 import com.gk.common.annotation.RequiresPermission;
 import com.gk.common.constant.Constant;
+import com.gk.common.dto.LabelDTO;
 import com.gk.common.page.PageData;
 import com.gk.common.tools.DataMap;
 import com.gk.common.tools.R;
@@ -51,12 +52,18 @@ public class SysRoleController {
 		return R.ok(page);
 	}
 
-	@GetMapping("list")
-	@Operation(summary = "列表")
-	@RequiresPermission("sys:role:list")
-	public R list(){
-		List<SysRoleDTO> data = sysRoleService.list(new DataMap());
+    @GetMapping("list")
+    @Operation(summary = "列表")
+    @RequiresPermission("sys:role:list")
+    public R<?> list(){
+        List<SysRoleDTO> data = sysRoleService.list(new DataMap());
+        return R.ok(data);
+    }
 
+	@GetMapping("dict")
+	@Operation(summary = "字典")
+	public R<?> dict(@RequestMap DataMap params){
+		List<LabelDTO> data = sysRoleService.getDict(params);
 		return R.ok(data);
 	}
 
@@ -64,18 +71,23 @@ public class SysRoleController {
 	@Operation(summary = "信息")
 	@RequiresPermission("sys:role:info")
 	public R<?> get(@PathVariable("id") Long id){
-		SysRoleDTO data = sysRoleService.get(id);
-
+		SysRoleDTO data = new SysRoleDTO();
 		//查询角色对应的菜单
 		List<Long> menuIdList = sysRoleMenuService.getMenuIdList(id);
 		data.setMenuIdList(menuIdList);
-
 		//查询角色对应的数据权限
 		List<Long> deptIdList = sysRoleDataScopeService.getDeptIdList(id);
 		data.setDeptIdList(deptIdList);
-
 		return R.ok(data);
 	}
+
+    @GetMapping("menu")
+    @Operation(summary = "信息")
+//    @RequiresPermission("sys:role:info")
+    public R<?> getMenu(@RequestParam Long id){
+        List<Long> menuIdList = sysRoleMenuService.getMenuIdList(id);
+        return R.ok(menuIdList);
+    }
 
 	@PostMapping
 	@Operation(summary = "保存")
@@ -85,10 +97,11 @@ public class SysRoleController {
 		return R.ok();
 	}
 
-	@PutMapping
+	@PutMapping("{id}")
 	@Operation(summary = "修改")
 	@RequiresPermission("sys:role:update")
-	public R<?> update(@RequestBody SysRoleDTO dto){
+	public R<?> update(@PathVariable("id") Long id, @RequestBody SysRoleDTO dto){
+        dto.setId(id);
 		sysRoleService.update(dto);
 		return R.ok();
 	}
@@ -96,7 +109,7 @@ public class SysRoleController {
 	@DeleteMapping
 	@Operation(summary = "删除")
 	@RequiresPermission("sys:role:delete")
-	public R<?> delete(@RequestBody Long[] ids){
+	public R<?> delete(@RequestParam Long[] ids){
 		//效验数据
 		AssertUtils.isArrayEmpty(ids, "id");
 		sysRoleService.delete(ids);

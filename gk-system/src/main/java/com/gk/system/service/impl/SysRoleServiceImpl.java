@@ -2,8 +2,10 @@ package com.gk.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.gk.common.beans.CurrentUser;
 import com.gk.common.constant.Constant;
 import com.gk.common.core.service.impl.BaseServiceImpl;
+import com.gk.common.dto.LabelDTO;
 import com.gk.common.handler.LoginUser;
 import com.gk.common.handler.UserUtils;
 import com.gk.common.page.PageData;
@@ -12,6 +14,7 @@ import com.gk.common.utils.ConvertUtils;
 import com.gk.system.dao.SysRoleDao;
 import com.gk.system.dto.SysRoleDTO;
 import com.gk.system.entity.SysRoleEntity;
+import com.gk.system.entity.SysTenantEntity;
 import com.gk.system.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -31,13 +34,15 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleDao, SysRoleEntit
 	private final SysRoleDataScopeService sysRoleDataScopeService;
 	private final SysRoleUserService sysRoleUserService;
 	private final SysDeptService sysDeptService;
+    private final CurrentUser currentUser;
 
-    protected SysRoleServiceImpl(SysRoleDao baseDao, SysRoleMenuService sysRoleMenuService, SysRoleDataScopeService sysRoleDataScopeService, SysRoleUserService sysRoleUserService, SysDeptService sysDeptService) {
+    protected SysRoleServiceImpl(SysRoleDao baseDao, SysRoleMenuService sysRoleMenuService, SysRoleDataScopeService sysRoleDataScopeService, SysRoleUserService sysRoleUserService, SysDeptService sysDeptService, CurrentUser currentUser) {
         super(baseDao);
         this.sysRoleMenuService = sysRoleMenuService;
         this.sysRoleDataScopeService = sysRoleDataScopeService;
         this.sysRoleUserService = sysRoleUserService;
         this.sysDeptService = sysDeptService;
+        this.currentUser = currentUser;
     }
 
     @Override
@@ -64,9 +69,8 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleDao, SysRoleEntit
 		wrapper.like(StringUtils.isNotBlank(name), "name", name);
 
 		//普通管理员，只能查询所属部门及子部门的数据
-        LoginUser user = UserUtils.getCurrentUser();
-		if(user.getIsAdmin()) {
-			List<Long> deptIdList = sysDeptService.getSubDeptIdList(user.getDeptId());
+		if(!currentUser.isAdmin()) {
+			List<Long> deptIdList = sysDeptService.getSubDeptIdList(currentUser.getDeptId());
 			wrapper.in(deptIdList != null, "dept_id", deptIdList);
 		}
 
@@ -80,7 +84,19 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleDao, SysRoleEntit
 		return ConvertUtils.sourceToTarget(entity, SysRoleDTO.class);
 	}
 
-	@Override
+    @Override
+    public List<LabelDTO> getDict(DataMap params) {
+        List<Integer> list = params.getList("status", Integer.class, Constant.Status.defaultStatus());
+
+        QueryWrapper<SysRoleEntity> wrapper = new QueryWrapper<>();
+        wrapper.select("id", "name");
+        wrapper.in("status", list);
+        List<SysRoleEntity> result = baseDao.selectList(wrapper);
+
+        return result.stream().map(item -> new LabelDTO(item.getId(), item.getName())).toList();
+    }
+
+    @Override
 	@Transactional(rollbackFor = Exception.class)
 	public void save(SysRoleDTO dto) {
 		SysRoleEntity entity = ConvertUtils.sourceToTarget(dto, SysRoleEntity.class);

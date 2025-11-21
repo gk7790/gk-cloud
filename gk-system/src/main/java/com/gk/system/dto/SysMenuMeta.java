@@ -1,8 +1,11 @@
 package com.gk.system.dto;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SysMenuMeta {
 
     /** 激活时显示的图标 */
@@ -16,9 +19,9 @@ public class SysMenuMeta {
     /** 徽标内容(当徽标类型为normal时有效) */
     private String badge;
     /** 徽标类型 */
-    private Integer badgeType;
+    private String badgeType;
     /** 徽标颜色 */
-    private Integer badgeVariants;
+    private String badgeVariants;
     /** 在菜单中隐藏下级 */
     private Boolean hideChildrenInMenu;
     /** 在面包屑中隐藏 */

@@ -1,5 +1,9 @@
 package com.gk.security.utils;
 
+import cn.hutool.core.util.ObjectUtil;
+import com.gk.common.beans.CurrentUser;
+import com.gk.common.constant.Constant;
+import com.gk.common.enums.SysEnum;
 import com.gk.security.entity.SysUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -10,19 +14,18 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public class SecurityUtils {
-
-    private SecurityUtils() {}
-
+public class SecurityUtils implements CurrentUser {
 
     /**
      * 获取当前用户ID
      */
-    public static Long getUserId() {
+    public Long getUserId() {
         SysUser user = getCurrentUser();
         return user != null ? user.getId() : null;
     }
@@ -30,15 +33,23 @@ public class SecurityUtils {
     /**
      * 获取当前用户名
      */
-    public static String getUsername() {
+    public String getUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication != null ? authentication.getName() : null;
     }
 
     /**
+     * 获取当前部门ID
+     */
+    public Long getDeptId() {
+        SysUser user = getCurrentUser();
+        return user != null ? user.getDeptId() : null;
+    }
+
+    /**
      * 获取当前租户ID
      */
-    public static Long getTenantId() {
+    public Long getTenantId() {
         SysUser user = getCurrentUser();
         return user != null ? user.getTenantId() : null;
     }
@@ -46,7 +57,7 @@ public class SecurityUtils {
     /**
      * 获取当前用户权限
      */
-    public static List<String> getAuthorities() {
+    public List<String> getAuthorities() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null) {
@@ -61,28 +72,29 @@ public class SecurityUtils {
     /**
      * 检查是否有权限
      */
-    public static boolean hasAuthority(String authority) {
+    public boolean hasAuthority(String authority) {
         return getAuthorities().contains(authority);
     }
 
     /**
      * 检查是否有角色
      */
-    public static boolean hasRole(String role) {
+    public boolean hasRole(String role) {
         return hasAuthority("ROLE_" + role);
     }
 
     /**
      * 是否是管理员
      */
-    public static boolean isAdmin() {
-        return hasRole("ADMIN");
+    public boolean isAdmin() {
+        SysUser user = getCurrentUser();
+        return user.isSuperAdmin();
     }
 
     /**
      * 获取当前登录用户
      */
-    public static SysUser getCurrentUser() {
+    public SysUser getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null
@@ -97,4 +109,29 @@ public class SecurityUtils {
 
         return null;
     }
+
+    /**
+     * 获取当前登录用户
+     */
+    public void setDeptAndTenant(Map<String, Object> params) {
+        SysUser currentUser = getCurrentUser();
+        if (ObjectUtil.isNotEmpty(params) && currentUser.getSuperAdmin() == SysEnum.sAdmin.NO.value()) {
+            Optional<Long> dept = Optional.of(currentUser).map(SysUser::getDeptId);
+            dept.ifPresent(aLong -> params.put("deptId", aLong));
+            Optional<Long> tenant = Optional.of(currentUser).map(SysUser::getTenantId);
+            tenant.ifPresent(aLong -> params.put("tenantId", aLong));
+        }
+    }
+
+    /**
+     * 获取当前登录用户
+     */
+    public void setDept(Map<String, Object> params) {
+        SysUser currentUser = getCurrentUser();
+        if (ObjectUtil.isNotEmpty(params) && currentUser.getSuperAdmin() == SysEnum.sAdmin.NO.value()) {
+            Optional<Long> dept = Optional.of(currentUser).map(SysUser::getDeptId);
+            dept.ifPresent(aLong -> params.put("deptId", aLong));
+        }
+    }
+
 }
