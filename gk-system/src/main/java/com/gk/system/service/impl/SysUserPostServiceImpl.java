@@ -6,6 +6,7 @@ import com.gk.common.core.service.impl.BaseServiceImpl;
 import com.gk.system.dao.SysUserPostDao;
 import com.gk.system.entity.SysUserPostEntity;
 import com.gk.system.service.SysUserPostService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,11 +17,8 @@ import java.util.List;
  * @author Lowen
  */
 @Service
+@RequiredArgsConstructor
 public class SysUserPostServiceImpl extends BaseServiceImpl<SysUserPostDao, SysUserPostEntity> implements SysUserPostService {
-
-    protected SysUserPostServiceImpl(SysUserPostDao baseDao) {
-        super(baseDao);
-    }
 
     @Override
     public void saveOrUpdate(Long userId, List<Long> postIdList) {

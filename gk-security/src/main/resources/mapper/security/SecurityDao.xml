@@ -4,15 +4,17 @@
 <mapper namespace="com.gk.security.dao.SecurityDao">
 
     <select id="findByUsername" resultType="com.gk.security.entity.SysUser">
-        SELECT u.id AS id, u.username AS username, u.`password` as 'password', u.dept_id as 'deptId', u.email,
-        u.tenant_id as 'tenantId', u.avatar as 'avatar', u.super_admin as 'superAdmin', u.`status` as 'status'
+        SELECT u.id AS id, u.dept_id AS 'deptId', u.tenant_id AS 'tenantId', u.username AS 'username',
+        u.`password` AS 'password', u.real_name AS 'realName', u.nickname AS 'nickname', u.email as 'email',
+        u.avatar AS 'avatar', u.super_admin AS 'superAdmin', u.`status` AS 'status', u.gender AS 'gender'
         FROM sys_user AS u
         WHERE u.username = #{username}
     </select>
 
     <select id="findByEmail" resultType="com.gk.security.entity.SysUser">
-        SELECT u.id AS id, u.username AS username, u.`password` as 'password', u.dept_id as 'deptId', u.email,
-        u.tenant_id as 'tenantId', u.avatar as 'avatar', u.super_admin as 'superAdmin', u.`status` as 'status'
+        SELECT u.id AS id, u.dept_id AS 'deptId', u.tenant_id AS 'tenantId', u.username AS 'username',
+        u.`password` AS 'password', u.real_name AS 'realName', u.nickname AS 'nickname', u.email as 'email',
+        u.avatar AS 'avatar', u.super_admin AS 'superAdmin', u.`status` AS 'status', u.gender AS 'gender'
         FROM sys_user AS u
         WHERE u.email = #{email}
     </select>

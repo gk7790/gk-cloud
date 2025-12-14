@@ -3,10 +3,10 @@ package com.gk.system.web;
 
 import com.gk.common.annotation.RequestMap;
 import com.gk.common.annotation.RequiresPermission;
+import com.gk.common.beans.CurrentUser;
 import com.gk.common.constant.Constant;
 import com.gk.common.exception.ErrorCode;
 import com.gk.common.exception.GkException;
-import com.gk.common.handler.UserUtils;
 import com.gk.common.page.PageData;
 import com.gk.common.password.PasswordUtils;
 import com.gk.common.tools.DataMap;
@@ -39,6 +39,7 @@ import java.util.List;
 @RequestMapping("/sys/user")
 @RequiredArgsConstructor
 public class SysUserController {
+    private final CurrentUser currentUser;
 	private final SysUserService sysUserService;
 	private final SysUserPostService sysUserPostService;
 	private final SysRoleUserService sysRoleUserService;
@@ -83,7 +84,8 @@ public class SysUserController {
 	@GetMapping("info")
 	@Operation(summary = "登录用户信息")
 	public R<?> info(){
-        Long userId = 0L;
+        Long userId = currentUser.getUserId();
+
         SysUserDTO data = sysUserService.get(userId);
 		return R.ok(data);
 	}
@@ -102,8 +104,7 @@ public class SysUserController {
     @PutMapping("password")
 	@Operation(summary = "修改密码")
 	public R<?> password(@RequestBody PasswordDTO dto){
-
-        SysUserEntity user = sysUserService.selectById(UserUtils.getUserId());
+        SysUserEntity user = sysUserService.selectById(currentUser.getUserId());
 		//原密码不正确
 		if(!PasswordUtils.matches(dto.getPassword(), user.getPassword())){
 			return R.error(ErrorCode.PASSWORD_ERROR);
@@ -144,7 +145,7 @@ public class SysUserController {
 		AssertUtils.isArrayEmpty(ids, "id");
 
 		List<Long> idList = Arrays.asList(ids);
-		if(idList.contains(UserUtils.getUserId())){
+		if(idList.contains(currentUser.getUserId())){
 			throw new GkException(ErrorCode.DEL_MYSELF_ERROR);
 		}
 		sysUserService.deleteBatchIds(idList);

@@ -14,10 +14,13 @@ import com.gk.common.constant.Constant;
 import com.gk.common.core.service.BaseService;
 import com.gk.common.page.PageData;
 import com.gk.common.utils.ConvertUtils;
+import jakarta.annotation.Resource;
 import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
@@ -33,9 +36,10 @@ import java.util.function.BiConsumer;
  */
 public abstract class BaseServiceImpl<M extends BaseMapper<T>, T>  implements BaseService<T> {
     protected Log ibatis_log = LogFactory.getLog(getClass());
-    protected final M baseDao;
+    protected M baseDao;
 
-    protected BaseServiceImpl(M baseDao) {
+    @Autowired
+    public void setBaseDao(M baseDao) {
         this.baseDao = baseDao;
     }
 

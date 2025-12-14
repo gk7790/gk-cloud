@@ -6,6 +6,7 @@ import com.gk.system.dao.SysLanguageDao;
 import com.gk.system.entity.SysDictTypeEntity;
 import com.gk.system.entity.SysLanguageEntity;
 import com.gk.system.service.SysLanguageService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,11 +19,8 @@ import java.util.stream.Collectors;
  * @author Lowen
  */
 @Service
+@RequiredArgsConstructor
 public class SysLanguageServiceImpl extends BaseServiceImpl<SysLanguageDao, SysLanguageEntity> implements SysLanguageService {
-
-    protected SysLanguageServiceImpl(SysLanguageDao baseDao) {
-        super(baseDao);
-    }
 
     @Override
     public void saveOrUpdate(String tableName, Long tableId, String fieldName, String fieldValue, String language) {

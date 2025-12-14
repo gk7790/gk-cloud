@@ -3,7 +3,9 @@ package com.gk.security.utils;
 import cn.hutool.core.util.ObjectUtil;
 import com.gk.common.beans.CurrentUser;
 import com.gk.common.constant.Constant;
+import com.gk.common.dto.LoginUser;
 import com.gk.common.enums.SysEnum;
+import com.gk.common.utils.ConvertUtils;
 import com.gk.security.entity.SysUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -91,6 +93,12 @@ public class SecurityUtils implements CurrentUser {
         return user.isSuperAdmin();
     }
 
+    @Override
+    public LoginUser getLoginUser() {
+        SysUser currentUser = getCurrentUser();
+        return ConvertUtils.sourceToTarget(currentUser, LoginUser.class);
+    }
+
     /**
      * 获取当前登录用户
      */
@@ -133,5 +141,6 @@ public class SecurityUtils implements CurrentUser {
             dept.ifPresent(aLong -> params.put("deptId", aLong));
         }
     }
+
 
 }

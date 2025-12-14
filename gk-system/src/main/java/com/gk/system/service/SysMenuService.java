@@ -2,7 +2,7 @@ package com.gk.system.service;
 
 
 import com.gk.common.core.service.BaseService;
-import com.gk.common.handler.LoginUser;
+import com.gk.common.dto.LoginUser;
 import com.gk.system.dto.SysMenuDTO;
 import com.gk.system.entity.SysMenuEntity;
 

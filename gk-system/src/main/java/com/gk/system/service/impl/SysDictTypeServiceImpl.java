@@ -29,13 +29,10 @@ import java.util.List;
  * @author Lowen
  */
 @Service
+@RequiredArgsConstructor
 public class SysDictTypeServiceImpl extends BaseServiceImpl<SysDictTypeDao, SysDictTypeEntity> implements SysDictTypeService {
-    @Autowired
-    private SysDictDataDao sysDictDataDao;
+    private final SysDictDataDao sysDictDataDao;
 
-    protected SysDictTypeServiceImpl(SysDictTypeDao baseDao) {
-        super(baseDao);
-    }
 
     @Override
     public PageData<SysDictTypeDTO> page(DataMap params) {

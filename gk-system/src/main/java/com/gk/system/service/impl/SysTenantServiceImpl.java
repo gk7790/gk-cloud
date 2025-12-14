@@ -22,6 +22,7 @@ import com.gk.system.entity.SysParamsEntity;
 import com.gk.system.entity.SysTenantEntity;
 import com.gk.system.service.SysParamsService;
 import com.gk.system.service.SysTenantService;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,13 +38,8 @@ import java.util.stream.Collectors;
  * @since 1.0.0
  */
 @Service
+@RequiredArgsConstructor
 public class SysTenantServiceImpl extends CrudServiceImpl<SysTenantDao, SysTenantEntity, SysTenantDTO> implements SysTenantService {
-    private final SysParamsRedis sysParamsRedis;
-
-    protected SysTenantServiceImpl(SysTenantDao baseDao, SysParamsRedis sysParamsRedis) {
-        super(baseDao);
-        this.sysParamsRedis = sysParamsRedis;
-    }
 
     @Override
     public QueryWrapper<SysTenantEntity> getWrapper(DataMap params) {

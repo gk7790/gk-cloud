@@ -1,6 +1,8 @@
 package com.gk.common.utils;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.ClassUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -18,6 +20,12 @@ public class ConvertUtils {
     public static <T> T sourceToTarget(Object source, Class<T> target){
         if(source == null){
             return null;
+        }
+        if (ClassUtil.isBasicType(target) || ClassUtil.isSimpleValueType(target)) {
+            return Convert.convert(target, source);
+        }
+        if (target.isAssignableFrom(source.getClass())) {
+            return (T) source;
         }
         try {
             T targetObject = target.getDeclaredConstructor().newInstance();

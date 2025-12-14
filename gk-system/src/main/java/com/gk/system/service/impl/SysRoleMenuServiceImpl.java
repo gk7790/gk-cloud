@@ -5,6 +5,7 @@ import com.gk.common.core.service.impl.BaseServiceImpl;
 import com.gk.system.dao.SysRoleMenuDao;
 import com.gk.system.entity.SysRoleMenuEntity;
 import com.gk.system.service.SysRoleMenuService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,11 +18,12 @@ import java.util.List;
  * @author Lowen
  */
 @Service
+@RequiredArgsConstructor
 public class SysRoleMenuServiceImpl extends BaseServiceImpl<SysRoleMenuDao, SysRoleMenuEntity> implements SysRoleMenuService {
 
-    protected SysRoleMenuServiceImpl(SysRoleMenuDao baseDao) {
-        super(baseDao);
-    }
+//    protected SysRoleMenuServiceImpl(SysRoleMenuDao baseDao) {
+//        super(baseDao);
+//    }
 
     @Override
 	@Transactional(rollbackFor = Exception.class)

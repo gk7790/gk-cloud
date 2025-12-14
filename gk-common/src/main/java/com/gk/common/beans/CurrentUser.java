@@ -1,5 +1,7 @@
 package com.gk.common.beans;
 
+import com.gk.common.dto.LoginUser;
+
 public interface CurrentUser {
 
     /**
@@ -27,4 +29,8 @@ public interface CurrentUser {
      */
     boolean isAdmin();
 
+    /**
+     * 登入用户信息
+     */
+    LoginUser getLoginUser();
 }

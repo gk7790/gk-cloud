@@ -28,7 +28,6 @@ public class JpaUserDetailsService implements UserDetailsService {
         Optional<SysUser> userOpt = securityDao.findByUsername(username);
 //        validateUser(user);
         SysUser user = userOpt.get();
-
         log.info("User loaded successfully: {}, roles: {}", username, user.getAuthorities().size());
         return user;
     }
@@ -48,8 +47,4 @@ public class JpaUserDetailsService implements UserDetailsService {
         }
     }
 
-    public static void main(String[] args) {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        System.out.println(bCryptPasswordEncoder.encode("123456"));
-    }
 }

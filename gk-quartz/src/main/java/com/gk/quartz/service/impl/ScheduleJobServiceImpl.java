@@ -12,6 +12,7 @@ import com.gk.quartz.dto.ScheduleJobDTO;
 import com.gk.quartz.entity.ScheduleJobEntity;
 import com.gk.quartz.service.ScheduleJobService;
 import com.gk.quartz.utils.ScheduleUtils;
+import lombok.RequiredArgsConstructor;
 import org.quartz.Scheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,13 +23,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, ScheduleJobEntity> implements ScheduleJobService {
-    @Autowired
-    private Scheduler scheduler;
-
-    protected ScheduleJobServiceImpl(ScheduleJobDao baseDao) {
-        super(baseDao);
-    }
+    private final Scheduler scheduler;
 
     @Override
     public PageData<ScheduleJobDTO> page(Map<String, Object> params) {

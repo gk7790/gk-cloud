@@ -10,6 +10,7 @@ import com.gk.system.dto.SysPostDTO;
 import com.gk.system.entity.SysPostEntity;
 import com.gk.system.service.SysPostService;
 import com.gk.system.service.SysUserPostService;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,13 +25,9 @@ import java.util.List;
  * @author Lowen
  */
 @Service
+@RequiredArgsConstructor
 public class SysPostServiceImpl extends CrudServiceImpl<SysPostDao, SysPostEntity, SysPostDTO> implements SysPostService {
-    @Autowired
-    private SysUserPostService sysUserPostService;
-
-    protected SysPostServiceImpl(SysPostDao baseDao) {
-        super(baseDao);
-    }
+    private final SysUserPostService sysUserPostService;
 
 
     @Override

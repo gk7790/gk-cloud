@@ -17,6 +17,7 @@ import com.gk.system.dao.SysWhitelistDao;
 import com.gk.system.dto.SysWhitelistDTO;
 import com.gk.system.entity.SysWhitelistEntity;
 import com.gk.system.service.SysWhitelistService;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,13 +35,13 @@ import java.util.stream.Collectors;
  * @since 1.0.0 2019-05-08
  */
 @Service
+@RequiredArgsConstructor
 public class SysWhitelistServiceImpl extends CrudServiceImpl<SysWhitelistDao, SysWhitelistEntity, SysWhitelistDTO> implements SysWhitelistService {
-    @Autowired
-    private RedisUtils redisUtils;
+    private final RedisUtils redisUtils;
 
-    protected SysWhitelistServiceImpl(SysWhitelistDao baseDao) {
-        super(baseDao);
-    }
+//    protected SysWhitelistServiceImpl(SysWhitelistDao baseDao) {
+//        super(baseDao);
+//    }
 
     @Override
     public QueryWrapper<SysWhitelistEntity> getWrapper(DataMap params) {

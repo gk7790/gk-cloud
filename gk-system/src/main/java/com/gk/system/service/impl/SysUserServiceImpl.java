@@ -32,19 +32,20 @@ import java.util.Map;
  * @author Lowen
  */
 @Service
+@RequiredArgsConstructor
 public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntity> implements SysUserService {
     private final SysRoleUserService sysRoleUserService;
 	private final SysDeptService sysDeptService;
 	private final SysUserPostService sysUserPostService;
     private final SecurityUtils securityUtils;
 
-    protected SysUserServiceImpl(SysUserDao baseDao, SysRoleUserService sysRoleUserService, SysDeptService sysDeptService, SysUserPostService sysUserPostService, SecurityUtils securityUtils) {
-        super(baseDao);
-        this.sysRoleUserService = sysRoleUserService;
-        this.sysDeptService = sysDeptService;
-        this.sysUserPostService = sysUserPostService;
-        this.securityUtils = securityUtils;
-    }
+//    protected SysUserServiceImpl(SysUserDao baseDao, SysRoleUserService sysRoleUserService, SysDeptService sysDeptService, SysUserPostService sysUserPostService, SecurityUtils securityUtils) {
+//        super(baseDao);
+//        this.sysRoleUserService = sysRoleUserService;
+//        this.sysDeptService = sysDeptService;
+//        this.sysUserPostService = sysUserPostService;
+//        this.securityUtils = securityUtils;
+//    }
 
     @Override
 	public PageData<SysUserDTO> page(Map<String, Object> params) {

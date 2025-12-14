@@ -1,4 +1,4 @@
-package com.gk.common.handler;
+package com.gk.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,12 +13,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginUser implements Serializable {
-    private Long userId;
+    private Long id;
+    private Long deptId;
+    private Long tenantId;
     private String username;
+    private String nickName;
     private String realName;
     private String email;
     private Boolean isAdmin;
-    private Long deptId;
+    private Integer gender;
     private List<String> roles;
     private List<String> authCode;
 }

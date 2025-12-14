@@ -24,10 +24,6 @@ import java.util.List;
  */
 public abstract class CrudServiceImpl<M extends BaseMapper<T>, T, D> extends BaseServiceImpl<M, T> implements CrudService<T, D> {
 
-    protected CrudServiceImpl(M baseDao) {
-        super(baseDao);
-    }
-
     protected Class<D> currentDtoClass() {
         return (Class<D>)ReflectionKit.getSuperClassGenericType(getClass(), CrudServiceImpl.class, 2);
     }

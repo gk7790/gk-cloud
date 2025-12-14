@@ -15,6 +15,7 @@ import com.gk.system.dao.SysParamsDao;
 import com.gk.system.dto.SysParamsDTO;
 import com.gk.system.entity.SysParamsEntity;
 import com.gk.system.service.SysParamsService;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,13 +30,9 @@ import java.util.List;
  * @since 1.0.0
  */
 @Service
+@RequiredArgsConstructor
 public class SysParamsServiceImpl extends BaseServiceImpl<SysParamsDao, SysParamsEntity> implements SysParamsService {
     private final SysParamsRedis sysParamsRedis;
-
-    protected SysParamsServiceImpl(SysParamsDao baseDao, SysParamsRedis sysParamsRedis) {
-        super(baseDao);
-        this.sysParamsRedis = sysParamsRedis;
-    }
 
     private QueryWrapper<SysParamsEntity> getWrapper(DataMap params) {
         String paramCode = (String) params.get("paramCode");

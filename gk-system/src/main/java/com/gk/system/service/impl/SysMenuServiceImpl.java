@@ -1,22 +1,22 @@
 package com.gk.system.service.impl;
 
+import com.gk.common.beans.CurrentUser;
 import com.gk.common.constant.Constant;
 import com.gk.common.core.service.impl.BaseServiceImpl;
 import com.gk.common.exception.ErrorCode;
 import com.gk.common.exception.GkException;
-import com.gk.common.handler.LoginUser;
+import com.gk.common.dto.LoginUser;
 import com.gk.common.utils.ConvertUtils;
 import com.gk.common.utils.HttpContextUtils;
 import com.gk.common.utils.TreeUtils;
 import com.gk.common.utils.ValueUtils;
 import com.gk.system.dao.SysMenuDao;
 import com.gk.system.dto.SysMenuDTO;
-import com.gk.system.dto.SysMenuMeta;
-import com.gk.system.entity.SysLanguageEntity;
 import com.gk.system.entity.SysMenuEntity;
 import com.gk.system.service.SysLanguageService;
 import com.gk.system.service.SysMenuService;
 import com.gk.system.service.SysRoleMenuService;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -24,21 +24,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntity> implements SysMenuService {
-	@Autowired
-	private SysRoleMenuService sysRoleMenuService;
-	@Autowired
-	private SysLanguageService sysLanguageService;
+    private final CurrentUser currentUser;
+    private final SysRoleMenuService sysRoleMenuService;
+    private final SysLanguageService sysLanguageService;
 
-    protected SysMenuServiceImpl(SysMenuDao baseDao) {
-        super(baseDao);
-    }
+//    protected SysMenuServiceImpl(SysMenuDao baseDao) {
+//        super(baseDao);
+//    }
 
     @Override
 	public SysMenuDTO get(Long id) {
@@ -104,7 +103,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntit
 		if(user.getIsAdmin()){
 			menuList = baseDao.getMenuList(menuType);
 		}else {
-			menuList = baseDao.getUserMenuList(user.getUserId(), menuType, HttpContextUtils.getLanguage());
+			menuList = baseDao.getUserMenuList(currentUser.getUserId(), menuType, HttpContextUtils.getLanguage());
 		}
 
 		List<SysMenuDTO> dtoList = ConvertUtils.sourceToTarget(menuList, SysMenuDTO.class);

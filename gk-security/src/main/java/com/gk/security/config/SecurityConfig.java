@@ -155,14 +155,15 @@ public class SecurityConfig {
             response.setCharacterEncoding("UTF-8");
             SysUser user = (SysUser) authentication.getPrincipal();
             String token = JwtUtils.generateToken(user);
-            response.getWriter().write(JSONObject.toJSONString(R.ok(Map.of("accessToken", token,
-                    "id", user.getId(),
-                    "realName",  "sadmin",
-                    "username", "admin",
-                    "roles", List.of("super"),
-                    "tokenType", "Bearer",
-                    "expiresIn", 86400
-            ))));
+            Map<String, Object> userMap = new HashMap<>();
+            userMap.put("id", user.getId());
+            userMap.put("username", user.getUsername());
+            userMap.put("realName", user.getNickName());
+            userMap.put("roles", List.of("super"));
+            userMap.put("accessToken", token);
+            userMap.put("tokenType", "Bearer");
+            userMap.put("expiresIn", 86400);
+            response.getWriter().write(JSONObject.toJSONString(R.ok(userMap)));
         };
     }
 

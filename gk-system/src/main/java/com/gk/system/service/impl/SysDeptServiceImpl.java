@@ -12,6 +12,7 @@ import com.gk.system.dao.SysUserDao;
 import com.gk.system.dto.SysDeptDTO;
 import com.gk.system.entity.SysDeptEntity;
 import com.gk.system.service.SysDeptService;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,13 +25,9 @@ import java.util.Map;
 
 
 @Service
+@RequiredArgsConstructor
 public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntity> implements SysDeptService {
-	@Autowired
-    private SysUserDao sysUserDao;
-
-    protected SysDeptServiceImpl(SysDeptDao baseDao) {
-        super(baseDao);
-    }
+    private final SysUserDao sysUserDao;
 
     @Override
 	public List<SysDeptDTO> list(Map<String, Object> params) {

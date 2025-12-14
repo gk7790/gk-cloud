@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class SysUser implements UserDetails {
     private Integer superAdmin;
     private Integer status;
     private String realName;
+    private Integer gender;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

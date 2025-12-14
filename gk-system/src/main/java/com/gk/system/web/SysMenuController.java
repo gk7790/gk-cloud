@@ -1,13 +1,11 @@
 package com.gk.system.web;
 
 
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
 import com.gk.common.annotation.RequiresPermission;
+import com.gk.common.beans.CurrentUser;
 import com.gk.common.enums.SysEnum;
 import com.gk.common.exception.ErrorCode;
-import com.gk.common.handler.LoginUser;
-import com.gk.common.handler.UserUtils;
+import com.gk.common.dto.LoginUser;
 import com.gk.common.tools.R;
 import com.gk.common.utils.ConvertUtils;
 import com.gk.common.validator.AssertUtils;
@@ -34,12 +32,13 @@ import java.util.Set;
 @Tag(name = "菜单管理")
 @AllArgsConstructor
 public class SysMenuController {
-	private final SysMenuService sysMenuService;
+    private final CurrentUser currentUser;
+    private final SysMenuService sysMenuService;
 
 	@GetMapping("nav")
 	@Operation(summary = "导航")
 	public R<?> nav(){
-        LoginUser user = UserUtils.getCurrentUser();
+        LoginUser user = currentUser.getLoginUser();
 		List<SysMenuDTO> list = sysMenuService.getUserMenuList(user, SysEnum.MenuTypeEnum.MENU.value());
 		return R.ok(list);
 	}
@@ -47,7 +46,7 @@ public class SysMenuController {
 	@GetMapping("permissions")
 	@Operation(summary = "权限标识")
 	public R<?> permissions(){
-        LoginUser user = UserUtils.getCurrentUser();
+        LoginUser user = currentUser.getLoginUser();
 		Set<String> set = sysMenuService.getUserPermissions(user);
 		return R.ok(set);
 	}
@@ -114,7 +113,7 @@ public class SysMenuController {
 	@Operation(summary = "角色菜单权限")
 	@RequiresPermission("sys:menu:select")
 	public R<?> select(){
-        LoginUser user = UserUtils.getCurrentUser();
+        LoginUser user = currentUser.getLoginUser();
 		List<SysMenuDTO> list = sysMenuService.getUserMenuList(user, null);
 		return R.ok(list);
 	}

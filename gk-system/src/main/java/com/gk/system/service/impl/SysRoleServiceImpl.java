@@ -6,16 +6,14 @@ import com.gk.common.beans.CurrentUser;
 import com.gk.common.constant.Constant;
 import com.gk.common.core.service.impl.BaseServiceImpl;
 import com.gk.common.dto.LabelDTO;
-import com.gk.common.handler.LoginUser;
-import com.gk.common.handler.UserUtils;
 import com.gk.common.page.PageData;
 import com.gk.common.tools.DataMap;
 import com.gk.common.utils.ConvertUtils;
 import com.gk.system.dao.SysRoleDao;
 import com.gk.system.dto.SysRoleDTO;
 import com.gk.system.entity.SysRoleEntity;
-import com.gk.system.entity.SysTenantEntity;
 import com.gk.system.service.*;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +27,7 @@ import java.util.List;
  * @author Lowen
  */
 @Service
+@RequiredArgsConstructor
 public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleDao, SysRoleEntity> implements SysRoleService {
 	private final SysRoleMenuService sysRoleMenuService;
 	private final SysRoleDataScopeService sysRoleDataScopeService;
@@ -36,14 +35,14 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleDao, SysRoleEntit
 	private final SysDeptService sysDeptService;
     private final CurrentUser currentUser;
 
-    protected SysRoleServiceImpl(SysRoleDao baseDao, SysRoleMenuService sysRoleMenuService, SysRoleDataScopeService sysRoleDataScopeService, SysRoleUserService sysRoleUserService, SysDeptService sysDeptService, CurrentUser currentUser) {
-        super(baseDao);
-        this.sysRoleMenuService = sysRoleMenuService;
-        this.sysRoleDataScopeService = sysRoleDataScopeService;
-        this.sysRoleUserService = sysRoleUserService;
-        this.sysDeptService = sysDeptService;
-        this.currentUser = currentUser;
-    }
+//    protected SysRoleServiceImpl(SysRoleDao baseDao, SysRoleMenuService sysRoleMenuService, SysRoleDataScopeService sysRoleDataScopeService, SysRoleUserService sysRoleUserService, SysDeptService sysDeptService, CurrentUser currentUser) {
+//        super(baseDao);
+//        this.sysRoleMenuService = sysRoleMenuService;
+//        this.sysRoleDataScopeService = sysRoleDataScopeService;
+//        this.sysRoleUserService = sysRoleUserService;
+//        this.sysDeptService = sysDeptService;
+//        this.currentUser = currentUser;
+//    }
 
     @Override
 	public PageData<SysRoleDTO> page(DataMap params) {

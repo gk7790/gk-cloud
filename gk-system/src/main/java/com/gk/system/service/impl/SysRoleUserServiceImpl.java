@@ -5,6 +5,7 @@ import com.gk.common.core.service.impl.BaseServiceImpl;
 import com.gk.system.dao.SysRoleUserDao;
 import com.gk.system.entity.SysRoleUserEntity;
 import com.gk.system.service.SysRoleUserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,11 +17,12 @@ import java.util.List;
  * @since 1.0.0
  */
 @Service
+@RequiredArgsConstructor
 public class SysRoleUserServiceImpl extends BaseServiceImpl<SysRoleUserDao, SysRoleUserEntity> implements SysRoleUserService {
 
-    protected SysRoleUserServiceImpl(SysRoleUserDao baseDao) {
-        super(baseDao);
-    }
+//    protected SysRoleUserServiceImpl(SysRoleUserDao baseDao) {
+//        super(baseDao);
+//    }
 
     @Override
     public void saveOrUpdate(Long userId, List<Long> roleIdList) {

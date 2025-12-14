@@ -18,10 +18,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class ScheduleJobLogServiceImpl extends BaseServiceImpl<ScheduleJobLogDao, ScheduleJobLogEntity> implements ScheduleJobLogService {
 
-    protected ScheduleJobLogServiceImpl(ScheduleJobLogDao baseDao) {
-        super(baseDao);
-    }
-
     @Override
 	public PageData<ScheduleJobLogDTO> page(DataMap params) {
 		IPage<ScheduleJobLogEntity> page = baseDao.selectPage(

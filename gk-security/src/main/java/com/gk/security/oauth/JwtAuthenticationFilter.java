@@ -33,6 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 获取 Token
         String jwt = getJwtFromRequest(request);
+        System.out.println(request.getRequestURL() + ", jwt: " + jwt);
         // 验证 Token
         if (StringUtils.isNotBlank(jwt) && JwtUtils.validateToken(jwt)) {
             try {
@@ -89,7 +90,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     /**
      * 从 Token 中提取权限信息
      */
-    @SuppressWarnings("unchecked")
     private List<SimpleGrantedAuthority> getAuthoritiesFromToken(String token) {
         try {
             List<String> authorities = JwtUtils.getAuthoritiesFromToken(token);

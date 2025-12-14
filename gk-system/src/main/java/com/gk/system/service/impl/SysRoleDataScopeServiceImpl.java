@@ -5,6 +5,7 @@ import com.gk.common.core.service.impl.BaseServiceImpl;
 import com.gk.system.dao.SysRoleDataScopeDao;
 import com.gk.system.entity.SysRoleDataScopeEntity;
 import com.gk.system.service.SysRoleDataScopeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,12 +18,13 @@ import java.util.List;
  * @since 1.0.0
  */
 @Service
+@RequiredArgsConstructor
 public class SysRoleDataScopeServiceImpl extends BaseServiceImpl<SysRoleDataScopeDao, SysRoleDataScopeEntity>
         implements SysRoleDataScopeService {
 
-    protected SysRoleDataScopeServiceImpl(SysRoleDataScopeDao baseDao) {
-        super(baseDao);
-    }
+//    protected SysRoleDataScopeServiceImpl(SysRoleDataScopeDao baseDao) {
+//        super(baseDao);
+//    }
 
     @Override
     public List<Long> getDeptIdList(Long roleId) {

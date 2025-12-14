@@ -29,14 +29,9 @@ import java.util.Optional;
  * @author Lowen
  */
 @Service
+@RequiredArgsConstructor
 public class SysDictDataServiceImpl extends BaseServiceImpl<SysDictDataDao, SysDictDataEntity> implements SysDictDataService {
-    @Autowired
-    private SysLanguageService sysLanguageService;
-
-    protected SysDictDataServiceImpl(SysDictDataDao baseDao) {
-        super(baseDao);
-    }
-
+    private final SysLanguageService sysLanguageService;
 
     @Override
     public PageData<SysDictDataDTO> page(DataMap params) {
