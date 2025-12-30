@@ -39,7 +39,7 @@ public class SysMenuController {
 	@Operation(summary = "导航")
 	public R<?> nav(){
         LoginUser user = currentUser.getLoginUser();
-		List<SysMenuDTO> list = sysMenuService.getUserMenuList(user, SysEnum.MenuTypeEnum.MENU.value());
+		List<SysMenuDTO> list = sysMenuService.getUserMenuList(user, SysEnum.MenuType.enums());
 		return R.ok(list);
 	}
 
@@ -54,8 +54,8 @@ public class SysMenuController {
 	@GetMapping("list")
 	@Operation(summary = "列表")
 	@Parameter(name = "type", description = "菜单类型 0：菜单 1：按钮  null：全部", in = ParameterIn.QUERY)
-	public R<?> list(Integer type){
-		List<SysMenuDTO> list = sysMenuService.getAllMenuList(type);
+	public R<?> list(@RequestParam(required = false) List<Integer> typeList){
+		List<SysMenuDTO> list = sysMenuService.getAllMenuList(typeList);
 		return R.ok(list);
 	}
 

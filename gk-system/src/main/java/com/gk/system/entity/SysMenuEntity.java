@@ -62,5 +62,10 @@ public class SysMenuEntity extends SimpleEntity {
      */
     @TableField(typeHandler = JacksonTypeHandler.class)
     private SysMenuMeta meta;
+    /**
+     * 菜单标题
+     */
+    @TableField(exist = false)
+    private String title;
 
 }

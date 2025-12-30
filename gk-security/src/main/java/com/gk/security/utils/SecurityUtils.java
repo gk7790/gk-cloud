@@ -96,7 +96,9 @@ public class SecurityUtils implements CurrentUser {
     @Override
     public LoginUser getLoginUser() {
         SysUser currentUser = getCurrentUser();
-        return ConvertUtils.sourceToTarget(currentUser, LoginUser.class);
+        LoginUser loginUser = ConvertUtils.sourceToTarget(currentUser, LoginUser.class);
+        loginUser.setIsAdmin(currentUser.isSuperAdmin());
+        return loginUser;
     }
 
     /**

@@ -12,6 +12,7 @@ import com.gk.common.utils.TreeUtils;
 import com.gk.common.utils.ValueUtils;
 import com.gk.system.dao.SysMenuDao;
 import com.gk.system.dto.SysMenuDTO;
+import com.gk.system.dto.SysMenuMeta;
 import com.gk.system.entity.SysMenuEntity;
 import com.gk.system.service.SysLanguageService;
 import com.gk.system.service.SysMenuService;
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -34,10 +36,6 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntit
     private final CurrentUser currentUser;
     private final SysRoleMenuService sysRoleMenuService;
     private final SysLanguageService sysLanguageService;
-
-//    protected SysMenuServiceImpl(SysMenuDao baseDao) {
-//        super(baseDao);
-//    }
 
     @Override
 	public SysMenuDTO get(Long id) {
@@ -51,6 +49,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntit
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void addMenu(SysMenuEntity entity) {
+        entity.getMeta().setOrder(entity.getSort());
 		//保存菜单
 		insert(entity);
 		saveLanguage(entity.getId(), "meta.tile", ValueUtils.defaultValue(entity.getMeta().getTitle(), entity.getName()));
@@ -65,7 +64,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntit
 		if(entity.getId().equals(entity.getPid())){
 			throw new GkException(ErrorCode.SUPERIOR_MENU_ERROR);
 		}
-
+        entity.getMeta().setOrder(entity.getSort());
 		//更新菜单
 		updateById(entity);
 		saveLanguage(entity.getId(), "meta.tile", ValueUtils.defaultValue(entity.getMeta().getTitle(), entity.getName()));
@@ -85,25 +84,21 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntit
 	}
 
 	@Override
-	public List<SysMenuDTO> getAllMenuList(Integer menuType) {
-		List<SysMenuEntity> menuList = baseDao.getMenuList(menuType);
+	public List<SysMenuDTO> getAllMenuList(List<Integer> typeList) {
+		List<SysMenuEntity> menuList = baseDao.getMenuList(typeList, HttpContextUtils.getLanguage());
         List<SysMenuDTO> dtoList = ConvertUtils.sourceToTarget(menuList, SysMenuDTO.class);
-        if (CollectionUtils.isNotEmpty(dtoList)) {
-            Map<Long, String> language = sysLanguageService.getLanguage("sys_menu", "meta.tile", HttpContextUtils.getLanguage());
-            fillMenuTitle(dtoList, language);
-        }
         return TreeUtils.build(dtoList, Constant.MENU_ROOT);
 	}
 
 	@Override
-	public List<SysMenuDTO> getUserMenuList(LoginUser user, Integer menuType) {
+	public List<SysMenuDTO> getUserMenuList(LoginUser user, List<Integer> typeList) {
 		List<SysMenuEntity> menuList;
 
 		//系统管理员，拥有最高权限
 		if(user.getIsAdmin()){
-			menuList = baseDao.getMenuList(menuType);
+			menuList = baseDao.getMenuList(typeList, HttpContextUtils.getLanguage());
 		}else {
-			menuList = baseDao.getUserMenuList(currentUser.getUserId(), menuType, HttpContextUtils.getLanguage());
+			menuList = baseDao.getUserMenuList(currentUser.getUserId(), typeList, HttpContextUtils.getLanguage());
 		}
 
 		List<SysMenuDTO> dtoList = ConvertUtils.sourceToTarget(menuList, SysMenuDTO.class);
@@ -125,16 +120,5 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntit
     @Override
     public Set<String> getUserPermissions(LoginUser user) {
         return Set.of();
-    }
-
-    public void fillMenuTitle(List<SysMenuDTO> menus, Map<Long, String> langMap) {
-        for (SysMenuDTO menu : menus) {
-            if (ObjectUtils.isNotEmpty(menu.getMeta()) && langMap.containsKey(menu.getId())) {
-                String title = langMap.get(menu.getId());
-                if (StringUtils.isNotBlank(title)) {
-                    menu.getMeta().setTitle(title);
-                }
-            }
-        }
     }
 }

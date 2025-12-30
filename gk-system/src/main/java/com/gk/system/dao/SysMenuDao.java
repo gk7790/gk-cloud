@@ -20,18 +20,18 @@ public interface SysMenuDao extends BaseDao<SysMenuEntity> {
 	/**
 	 * 查询所有菜单列表
 	 *
-	 * @param menuType 菜单类型
+	 * @param typeList 菜单类型
 	 */
-	List<SysMenuEntity> getMenuList(@Param("type") Integer menuType);
+	List<SysMenuEntity> getMenuList(@Param("typeList") List<Integer> typeList, @Param("language") String language);
 
 	/**
 	 * 查询用户菜单列表
 	 *
 	 * @param userId 用户ＩＤ
-	 * @param menuType 菜单类型
+	 * @param typeList 菜单类型
 	 * @param language 语言
 	 */
-	List<SysMenuEntity> getUserMenuList(@Param("userId") Long userId, @Param("menuType") Integer menuType, @Param("language") String language);
+	List<SysMenuEntity> getUserMenuList(@Param("userId") Long userId, @Param("typeList") List<Integer> typeList, @Param("language") String language);
 
 	/**
 	 * 查询用户权限列表

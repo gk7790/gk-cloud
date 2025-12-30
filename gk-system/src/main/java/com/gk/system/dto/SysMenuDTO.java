@@ -56,6 +56,9 @@ public class SysMenuDTO extends TreeNode<SysMenuDTO> implements Serializable {
     @Schema(title = "组件路径")
     private String component;
 
+    @Schema(title = "标题")
+    private String title;
+
     /**
      * 样式
      */
