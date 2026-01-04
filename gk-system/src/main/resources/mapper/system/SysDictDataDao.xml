@@ -37,6 +37,10 @@
         SELECT d.dict_type_id, COALESCE(l.field_value, d.dict_label) as 'dictLabel', d.dict_value, d.attr_type
         FROM sys_dict_data d LEFT JOIN sys_language l
         ON l.table_name = 'sys_dict_data' and l.field_name = 'label' and d.id = l.table_id AND l.`language` = #{language}
+        <if test="dictType != null and dictType != ''">
+            LEFT JOIN sys_dict_type t ON d.dict_type_id = t.id
+            WHERE t.dict_type = #{dictType}
+        </if>
         ORDER BY d.dict_type_id, d.sort
     </select>
 

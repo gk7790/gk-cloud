@@ -13,6 +13,8 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -56,10 +58,9 @@ public class ScheduleJobController {
     @Operation(summary = "保存")
     @RequiresPermission("sys:schedule:save")
     public R<?> save(@RequestBody ScheduleJobDTO dto) {
-//        ValidatorUtils.validateEntity(dto, AddGroup.class, DefaultGroup.class);
-//        if (StringUtils.isNotBlank(dto.getParams())) {
-//            dto.setParams(RequestUtils.unescape(dto.getParams()));
-//        }
+        if (StringUtils.isNotBlank(dto.getParams())) {
+            dto.setParams(StringEscapeUtils.escapeHtml4(dto.getParams()));
+        }
         scheduleJobService.save(dto);
         return R.ok();
     }
@@ -68,10 +69,9 @@ public class ScheduleJobController {
     @Operation(summary = "修改")
     @RequiresPermission("sys:schedule:update")
     public R update(@RequestBody ScheduleJobDTO dto) {
-//        ValidatorUtils.validateEntity(dto, UpdateGroup.class, DefaultGroup.class);
-//        if (StringUtils.isNotBlank(dto.getParams())) {
-//            dto.setParams(RequestUtils.unescape(dto.getParams()));
-//        }
+        if (StringUtils.isNotBlank(dto.getParams())) {
+            dto.setParams(StringEscapeUtils.escapeHtml4(dto.getParams()));
+        }
         scheduleJobService.update(dto);
         return R.ok();
     }

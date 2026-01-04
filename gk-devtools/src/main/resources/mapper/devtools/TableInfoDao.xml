@@ -4,11 +4,11 @@
 <mapper namespace="com.gk.devtools.dao.TableInfoDao">
 
     <select id="getByTableName" resultType="com.gk.devtools.entity.TableInfoEntity">
-        select * from gen_table_info where table_name = #{value}
+        select * from gen_table_info where table_name = #{tableName}
     </select>
 
     <delete id="deleteByTableName">
-        delete from gen_table_info where table_name = #{value}
+        delete from gen_table_info where table_name = #{tableName}
     </delete>
 
 </mapper>

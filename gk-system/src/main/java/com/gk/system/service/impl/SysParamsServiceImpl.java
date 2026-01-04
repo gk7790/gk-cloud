@@ -9,6 +9,7 @@ import com.gk.common.core.service.impl.BaseServiceImpl;
 import com.gk.common.exception.ErrorCode;
 import com.gk.common.exception.GkException;
 import com.gk.common.page.PageData;
+import com.gk.common.service.SysParams;
 import com.gk.common.tools.DataMap;
 import com.gk.common.utils.ConvertUtils;
 import com.gk.system.dao.SysParamsDao;
@@ -31,7 +32,7 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-public class SysParamsServiceImpl extends BaseServiceImpl<SysParamsDao, SysParamsEntity> implements SysParamsService {
+public class SysParamsServiceImpl extends BaseServiceImpl<SysParamsDao, SysParamsEntity> implements SysParamsService, SysParams {
     private final SysParamsRedis sysParamsRedis;
 
     private QueryWrapper<SysParamsEntity> getWrapper(DataMap params) {

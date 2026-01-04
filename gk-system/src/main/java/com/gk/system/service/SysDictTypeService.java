@@ -1,6 +1,7 @@
 package com.gk.system.service;
 
 import com.gk.common.core.service.BaseService;
+import com.gk.common.dto.LabelDTO;
 import com.gk.common.page.PageData;
 import com.gk.common.tools.DataMap;
 import com.gk.system.dto.SysDictTypeDTO;
@@ -36,4 +37,5 @@ public interface SysDictTypeService extends BaseService<SysDictTypeEntity> {
      */
     List<DictType> getDictTypeList();
 
+    List<LabelDTO> getDictList(String dictType);
 }

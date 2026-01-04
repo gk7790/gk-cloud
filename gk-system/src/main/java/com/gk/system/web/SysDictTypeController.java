@@ -4,6 +4,7 @@ package com.gk.system.web;
 import com.gk.common.annotation.RequestMap;
 import com.gk.common.annotation.RequiresPermission;
 import com.gk.common.constant.Constant;
+import com.gk.common.dto.LabelDTO;
 import com.gk.common.page.PageData;
 import com.gk.common.tools.DataMap;
 import com.gk.common.tools.R;
@@ -50,13 +51,16 @@ public class SysDictTypeController {
         return R.ok(page);
     }
 
-    @GetMapping("{id}")
-    @Operation(summary = "信息")
-    @RequiresPermission("sys:dict:info")
-    public R<SysDictTypeDTO> get(@PathVariable("id") Long id){
-        SysDictTypeDTO data = sysDictTypeService.get(id);
+    @GetMapping("{dictType}")
+    public R<?> get(@PathVariable("dictType") String dictType){
+        List<LabelDTO> list = sysDictTypeService.getDictList(dictType);
+        return R.ok(list);
+    }
 
-        return R.ok(data);
+    @GetMapping("dict")
+    public R<?> dict(){
+        List<DictType> dictTypeList = sysDictTypeService.getDictTypeList();
+        return R.ok(dictTypeList.stream().map(e-> new LabelDTO(e.getId(), e.getDictType())).toList());
     }
 
     @PostMapping

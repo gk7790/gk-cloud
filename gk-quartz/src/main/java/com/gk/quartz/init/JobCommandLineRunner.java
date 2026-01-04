@@ -4,6 +4,7 @@ import com.gk.quartz.dao.ScheduleJobDao;
 import com.gk.quartz.entity.ScheduleJobEntity;
 import com.gk.quartz.utils.ScheduleUtils;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.CronTrigger;
 import org.quartz.Scheduler;
@@ -19,7 +20,7 @@ import java.util.List;
  */
 @Slf4j
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class JobCommandLineRunner implements CommandLineRunner {
     private final Scheduler scheduler;
     private final ScheduleJobDao scheduleJobDao;

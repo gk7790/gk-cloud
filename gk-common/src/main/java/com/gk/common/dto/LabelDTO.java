@@ -15,15 +15,15 @@ public class LabelDTO {
     private Long id;
     @JsonSerialize(using = ToStringSerializer.class)
     private Long pid;
-    private String code;
+    private String value;
     private String label;
     private List<LabelDTO> children;
 
     public LabelDTO() {
     }
 
-    public LabelDTO(String code, String label) {
-        this.code = code;
+    public LabelDTO(String value, String label) {
+        this.value = value;
         this.label = label;
     }
 

@@ -26,8 +26,8 @@ public class JpaUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.debug("Loading user by username: {}", username);
         Optional<SysUser> userOpt = securityDao.findByUsername(username);
-//        validateUser(user);
         SysUser user = userOpt.get();
+        validateUser(user);
         log.info("User loaded successfully: {}, roles: {}", username, user.getAuthorities().size());
         return user;
     }

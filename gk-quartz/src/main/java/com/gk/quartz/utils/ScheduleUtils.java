@@ -111,7 +111,6 @@ public class ScheduleUtils {
         	//参数
         	JobDataMap dataMap = new JobDataMap();
         	dataMap.put(JOB_PARAM_KEY, scheduleJob);
-        	
             scheduler.triggerJob(getJobKey(scheduleJob.getId()), dataMap);
         } catch (SchedulerException e) {
             throw new GkException(ErrorCode.JOB_ERROR, e);

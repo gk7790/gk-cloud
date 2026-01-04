@@ -3,6 +3,7 @@ package com.gk.system.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.gk.common.core.service.impl.BaseServiceImpl;
+import com.gk.common.dto.LabelDTO;
 import com.gk.common.page.PageData;
 import com.gk.common.tools.DataMap;
 import com.gk.common.utils.ConvertUtils;
@@ -98,7 +99,7 @@ public class SysDictTypeServiceImpl extends BaseServiceImpl<SysDictTypeDao, SysD
     @Override
     public List<DictType> getAllList() {
         List<DictType> typeList = baseDao.getDictTypeList();
-        List<DictData> dataList = sysDictDataDao.getDictDataList(HttpContextUtils.getLanguage());
+        List<DictData> dataList = sysDictDataDao.getDictDataList(null,HttpContextUtils.getLanguage());
         for(DictType type : typeList){
             for(DictData data : dataList){
                 if(type.getId().equals(data.getDictTypeId())){
@@ -114,4 +115,12 @@ public class SysDictTypeServiceImpl extends BaseServiceImpl<SysDictTypeDao, SysD
         return baseDao.getDictTypeList();
     }
 
+    @Override
+    public List<LabelDTO> getDictList(String dictType) {
+        if (StringUtils.isBlank(dictType)) {
+            return List.of();
+        }
+        List<DictData> dataList = sysDictDataDao.getDictDataList(dictType, HttpContextUtils.getLanguage());
+        return dataList.stream().map(e-> new LabelDTO(e.getDictValue(), e.getDictLabel())).toList();
+    }
 }
