@@ -20,6 +20,7 @@
         <module>gk-system</module>
         <module>gk-admin</module>
         <module>gk-security</module>
+        <module>gk-devtools</module>
     </modules>
 
     <properties>

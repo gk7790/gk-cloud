@@ -5,6 +5,7 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 
@@ -150,6 +151,7 @@ public class DataMap extends HashMap<String, Object> {
             return null;
         }
 
+
         // 已经是 LocalDateTime 类型
         if (val instanceof LocalDateTime) {
             return (LocalDateTime) val;
@@ -191,4 +193,18 @@ public class DataMap extends HashMap<String, Object> {
 
         return null;
     }
+
+    /**
+     * 校验 key的值 是否存在
+     * @param key key
+     * @return 布尔值
+     */
+    public boolean isValueNull(String key) {
+        Object o = get(key);
+        if (o instanceof String) {
+            return StrUtil.isNotBlank((String) o);
+        }
+        return ObjectUtil.isNotEmpty(o);
+    }
+
 }

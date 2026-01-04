@@ -38,7 +38,10 @@ gk:
   feign-name: gk-member
   feign-url: http://localhost:8080/survey
 
-#logging:
-#  level:
-#    root: debug
+logging:
+  level:
+    org.mybatis.spring: ERROR
+    org.apache.ibatis: ERROR
+    com.mysql: ERROR
+    com.gk: DEBUG
 #    org.springframework: trace

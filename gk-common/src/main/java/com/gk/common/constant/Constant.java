@@ -147,13 +147,13 @@ public interface Constant {
      */
     enum ScheduleStatus {
         /**
-         * 暂停
-         */
-        PAUSE(0),
-        /**
          * 正常
          */
-        NORMAL(1);
+        NORMAL(1),
+        /**
+         * 暂停
+         */
+        PAUSE(2);
 
         private int value;
 
