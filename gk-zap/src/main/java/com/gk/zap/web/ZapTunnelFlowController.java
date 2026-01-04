@@ -1,4 +1,41 @@
 package com.gk.zap.web;
 
-public class ZapProxyFlowController {
+import com.gk.common.annotation.RequestMap;
+import com.gk.common.constant.Constant;
+import com.gk.common.page.PageData;
+import com.gk.common.tools.DataMap;
+import com.gk.common.tools.R;
+import com.gk.zap.dto.ZapProxyFlowDTO;
+import com.gk.zap.service.ZapProxyFlowService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/zap/flow")
+@Tag(name = "隧道")
+@AllArgsConstructor
+public class ZapTunnelFlowController {
+    private final ZapProxyFlowService zapProxyFlowService;
+
+    @GetMapping("page")
+    @Operation(summary = "分页")
+    @Parameters({
+            @Parameter(name = Constant.PAGE, description = "当前页码，从1开始", in = ParameterIn.QUERY, required = true) ,
+            @Parameter(name = Constant.LIMIT, description = "每页显示记录数", in = ParameterIn.QUERY,required = true) ,
+            @Parameter(name = Constant.ORDER_FIELD, description = "排序字段", in = ParameterIn.QUERY) ,
+            @Parameter(name = Constant.ORDER, description = "排序方式，可选值(asc、desc)", in = ParameterIn.QUERY) ,
+            @Parameter(name = "paramCode", description = "参数编码", in = ParameterIn.QUERY)
+    })
+    public R<?> page(@Parameter(hidden = true) @RequestMap DataMap params){
+        PageData<ZapProxyFlowDTO> page = zapProxyFlowService.page(params);
+        return R.ok(page);
+    }
+
 }

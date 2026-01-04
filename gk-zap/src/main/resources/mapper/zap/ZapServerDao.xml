@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gk.zap.dao.ZapServerDao">
+
+    <resultMap type="com.gk.zap.entity.ZapServerEntity" id="zapServerMap">
+        <result property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="ip" column="ip"/>
+        <result property="port" column="port"/>
+        <result property="deviceId" column="device_id"/>
+        <result property="rootPaths" column="root_paths"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedBy" column="updated_by"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+</mapper>
