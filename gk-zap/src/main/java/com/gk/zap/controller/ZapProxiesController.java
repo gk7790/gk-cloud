@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -33,6 +34,7 @@ public class ZapProxiesController {
             @Parameter(name = Constant.ORDER, description = "排序方式，可选值(asc、desc)", in = ParameterIn.QUERY) ,
             @Parameter(name = "paramCode", description = "参数编码", in = ParameterIn.QUERY)
     })
+    @PreAuthorize("hasAuthority('sys:proxies:page')")
     public R<?> page(@Parameter(hidden = true) @RequestMap DataMap params){
         PageData<ZapProxiesDTO> page = zapProxiesService.page(params);
         return R.ok(page);
@@ -40,7 +42,7 @@ public class ZapProxiesController {
 
     @PostMapping
     @Operation(summary = "保存")
-    // @RequiresPermission("sys:dict:save")
+    @PreAuthorize("hasAuthority('sys:proxies:save')")
     public R<?> save(@RequestBody ZapProxiesDTO dto){
         AssertUtils.isNull(dto.getClientId(), "ClientId");
         zapProxiesService.add(dto);
@@ -49,7 +51,7 @@ public class ZapProxiesController {
 
     @PutMapping
     @Operation(summary = "修改")
-    // @RequiresPermission("sys:dict:update")
+    @PreAuthorize("hasAuthority('sys:proxies:update')")
     public R<?> update(@RequestBody ZapProxiesDTO dto){
         //效验数据
         zapProxiesService.update(dto);
@@ -58,6 +60,7 @@ public class ZapProxiesController {
 
     @DeleteMapping
     @Operation(summary = "删除")
+    @PreAuthorize("hasAuthority('sys:proxies:delete')")
     public R<?> delete(@RequestParam Long id){
         //效验数据
         AssertUtils.isNull(id, "id");

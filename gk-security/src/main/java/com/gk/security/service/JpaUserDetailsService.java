@@ -47,10 +47,16 @@ public class JpaUserDetailsService implements UserDetailsService {
 
         Set<String> roleAuth = getRoleAuthList(user.getId());
         user.setRoleAuthList(roleAuth);
-
         Set<String> permissions =  getUserPermissions(user.getId(), user.isSuperAdmin());
-        user.setAuthorities(permissions.parallelStream().map(SimpleGrantedAuthority::new).toList());
 
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>(roleAuth.size() +  permissions.size());
+        for (String auth : roleAuth) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + auth));
+        }
+        for (String permission : permissions) {
+            authorities.add(new SimpleGrantedAuthority(permission));
+        }
+        user.setAuthorities(authorities);
         return user;
     }
 
