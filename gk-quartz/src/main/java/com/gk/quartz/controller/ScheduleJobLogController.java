@@ -1,4 +1,4 @@
-package com.gk.quartz.web;
+package com.gk.quartz.controller;
 
 import com.gk.common.annotation.RequestMap;
 import com.gk.common.annotation.RequiresPermission;

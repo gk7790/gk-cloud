@@ -1,5 +1,6 @@
 package com.gk.common.redis;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.gk.common.utils.ConvertUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -9,10 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -143,6 +141,19 @@ public class RedisUtils {
             redisTemplate.opsForSet().add(key, values);
         }
     }
+
+    public void addSet(String key, Collection<?> values, long expire) {
+        if (CollectionUtil.isEmpty(values)) {
+            return;
+        }
+
+        redisTemplate.opsForSet().add(key, values.toArray());
+
+        if (expire != NOT_EXPIRE) {
+            expire(key, expire);
+        }
+    }
+
 
     /**
      * 添加 set

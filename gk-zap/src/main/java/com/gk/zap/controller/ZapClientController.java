@@ -1,4 +1,4 @@
-package com.gk.zap.web;
+package com.gk.zap.controller;
 
 import com.gk.common.annotation.RequestMap;
 import com.gk.common.constant.Constant;
@@ -50,7 +50,7 @@ public class ZapClientController {
 
     @PostMapping
     @Operation(summary = "保存")
-    // @RequiresPermission("sys:dict:save")
+    @PreAuthorize("hasAuthority('sys:client:save')")
     public R<?> save(@RequestBody ZapClientDTO dto){
         zapClientService.add(dto);
         return R.ok();
@@ -58,8 +58,7 @@ public class ZapClientController {
 
     @PutMapping
     @Operation(summary = "修改")
-    @PreAuthorize("hasAuthority('user:add')")
-    // @RequiresPermission("sys:dict:update")
+    @PreAuthorize("hasAuthority('sys:client:update')")
     public R<?> update(@RequestBody ZapClientDTO dto){
         //效验数据
         zapClientService.update(dto);
@@ -68,6 +67,7 @@ public class ZapClientController {
 
     @DeleteMapping
     @Operation(summary = "删除")
+    @PreAuthorize("hasAuthority('sys:client:delete')")
     public R<?> delete(@RequestParam Long id){
         //效验数据
         AssertUtils.isNull(id, "id");
@@ -81,6 +81,7 @@ public class ZapClientController {
      * @return 返回秘钥
      */
     @GetMapping("genSecret")
+    @PreAuthorize("hasAuthority('sys:client:genSecret')")
     public R<?> genSecret(@RequestParam Long id) {
         if (id == null || id <= 100) {
             return R.error(ErrorCode.BAD_REQUEST);

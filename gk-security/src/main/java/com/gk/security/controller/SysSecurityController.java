@@ -1,4 +1,4 @@
-package com.gk.security.web;
+package com.gk.security.controller;
 
 import com.gk.common.tools.R;
 import io.swagger.v3.oas.annotations.tags.Tag;

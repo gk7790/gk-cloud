@@ -1,17 +1,15 @@
-package com.gk.system.web;
+package com.gk.system.controller;
 
 
 import com.gk.common.annotation.RequestMap;
 import com.gk.common.annotation.RequiresPermission;
 import com.gk.common.constant.Constant;
-import com.gk.common.dto.LabelDTO;
 import com.gk.common.page.PageData;
 import com.gk.common.tools.DataMap;
 import com.gk.common.tools.R;
 import com.gk.common.validator.AssertUtils;
-import com.gk.system.dto.SysDictTypeDTO;
-import com.gk.system.entity.DictType;
-import com.gk.system.service.SysDictTypeService;
+import com.gk.system.dto.SysDictDataDTO;
+import com.gk.system.service.SysDictDataService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -20,62 +18,57 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 /**
- * 字典类型
+ * 字典数据
  *
  * @author Lowen
  */
 @RestController
-@RequestMapping("sys/dict/type")
-@Tag(name="字典类型")
+@RequestMapping("sys/dict/data")
+@Tag(name = "字典数据")
 @AllArgsConstructor
-public class SysDictTypeController {
-    private final SysDictTypeService sysDictTypeService;
+public class SysDictDataController {
+    private final SysDictDataService sysDictDataService;
 
     @GetMapping("page")
-    @Operation(summary = "字典类型")
+    @Operation(summary = "字典数据")
     @Parameters({
             @Parameter(name = Constant.PAGE, description = "当前页码，从1开始", in = ParameterIn.QUERY, required = true),
             @Parameter(name = Constant.LIMIT, description = "每页显示记录数", in = ParameterIn.QUERY, required = true),
             @Parameter(name = Constant.ORDER_FIELD, description = "排序字段", in = ParameterIn.QUERY),
             @Parameter(name = Constant.ORDER, description = "排序方式，可选值(asc、desc)", in = ParameterIn.QUERY),
-            @Parameter(name = "dictType", description = "字典类型", in = ParameterIn.QUERY),
-            @Parameter(name = "dictName", description = "字典名称", in = ParameterIn.QUERY)
+            @Parameter(name = "dictLabel", description = "字典标签", in = ParameterIn.QUERY),
+            @Parameter(name = "dictValue", description = "字典值", in = ParameterIn.QUERY)
     })
     @RequiresPermission("sys:dict:page")
-    public R<PageData<SysDictTypeDTO>> page(@Parameter(hidden = true) @RequestMap DataMap params){
+    public R<?> page(@RequestMap DataMap params){
         //字典类型
-        PageData<SysDictTypeDTO> page = sysDictTypeService.page(params);
+        PageData<SysDictDataDTO> page = sysDictDataService.getPage(params);
         return R.ok(page);
     }
 
-    @GetMapping("{dictType}")
-    public R<?> get(@PathVariable("dictType") String dictType){
-        List<LabelDTO> list = sysDictTypeService.getDictList(dictType);
-        return R.ok(list);
+    @GetMapping("{id}")
+    @Operation(summary = "信息")
+    @RequiresPermission("sys:dict:info")
+    public R<?> get(@PathVariable("id") Long id){
+        SysDictDataDTO data = sysDictDataService.get(id);
+        return R.ok(data);
     }
-
-    @GetMapping("dict")
-    public R<?> dict(){
-        List<DictType> dictTypeList = sysDictTypeService.getDictTypeList();
-        return R.ok(dictTypeList.stream().map(e-> new LabelDTO(e.getId(), e.getDictType())).toList());
-    }
-
     @PostMapping
     @Operation(summary = "保存")
     @RequiresPermission("sys:dict:save")
-    public R<?> save(@RequestBody SysDictTypeDTO dto){
-        sysDictTypeService.save(dto);
+    public R<?> save(@RequestBody SysDictDataDTO dto){
+        //效验数据
+        sysDictDataService.save(dto);
         return R.ok();
     }
 
     @PutMapping
     @Operation(summary = "修改")
     @RequiresPermission("sys:dict:update")
-    public R<?> update(@RequestBody SysDictTypeDTO dto){
-        sysDictTypeService.update(dto);
+    public R<?> update(@RequestBody SysDictDataDTO dto){
+        //效验数据
+        sysDictDataService.update(dto);
         return R.ok();
     }
 
@@ -85,17 +78,8 @@ public class SysDictTypeController {
     public R<?> delete(@RequestParam Long[] ids){
         //效验数据
         AssertUtils.isArrayEmpty(ids, "id");
-
-        sysDictTypeService.delete(ids);
-
+        sysDictDataService.delete(ids);
         return R.ok();
-    }
-
-    @GetMapping("all")
-    @Operation(summary = "所有字典数据")
-    public R<List<DictType>> all(){
-        List<DictType> list = sysDictTypeService.getAllList();
-        return R.ok(list);
     }
 
 }

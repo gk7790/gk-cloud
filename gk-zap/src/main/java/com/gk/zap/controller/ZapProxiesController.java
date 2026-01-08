@@ -1,28 +1,28 @@
-package com.gk.zap.web;
+package com.gk.zap.controller;
 
 import com.gk.common.annotation.RequestMap;
 import com.gk.common.constant.Constant;
 import com.gk.common.page.PageData;
 import com.gk.common.tools.DataMap;
 import com.gk.common.tools.R;
-import com.gk.zap.dto.ZapProxyFlowDTO;
-import com.gk.zap.service.ZapProxyFlowService;
+import com.gk.common.validator.AssertUtils;
+import com.gk.zap.dto.ZapProxiesDTO;
+import com.gk.zap.service.ZapProxiesService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/zap/flow")
+@RequestMapping("/zap/proxies")
 @Tag(name = "隧道")
 @AllArgsConstructor
-public class ZapTunnelFlowController {
-    private final ZapProxyFlowService zapProxyFlowService;
+public class ZapProxiesController {
+    private final ZapProxiesService zapProxiesService;
+
 
     @GetMapping("page")
     @Operation(summary = "分页")
@@ -34,8 +34,36 @@ public class ZapTunnelFlowController {
             @Parameter(name = "paramCode", description = "参数编码", in = ParameterIn.QUERY)
     })
     public R<?> page(@Parameter(hidden = true) @RequestMap DataMap params){
-        PageData<ZapProxyFlowDTO> page = zapProxyFlowService.page(params);
+        PageData<ZapProxiesDTO> page = zapProxiesService.page(params);
         return R.ok(page);
     }
+
+    @PostMapping
+    @Operation(summary = "保存")
+    // @RequiresPermission("sys:dict:save")
+    public R<?> save(@RequestBody ZapProxiesDTO dto){
+        AssertUtils.isNull(dto.getClientId(), "ClientId");
+        zapProxiesService.add(dto);
+        return R.ok();
+    }
+
+    @PutMapping
+    @Operation(summary = "修改")
+    // @RequiresPermission("sys:dict:update")
+    public R<?> update(@RequestBody ZapProxiesDTO dto){
+        //效验数据
+        zapProxiesService.update(dto);
+        return R.ok();
+    }
+
+    @DeleteMapping
+    @Operation(summary = "删除")
+    public R<?> delete(@RequestParam Long id){
+        //效验数据
+        AssertUtils.isNull(id, "id");
+        zapProxiesService.delete(id);
+        return R.ok();
+    }
+
 
 }

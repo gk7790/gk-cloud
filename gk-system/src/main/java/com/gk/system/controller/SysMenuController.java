@@ -1,4 +1,4 @@
-package com.gk.system.web;
+package com.gk.system.controller;
 
 
 import com.gk.common.annotation.RequiresPermission;
@@ -47,7 +47,7 @@ public class SysMenuController {
 	@Operation(summary = "权限标识")
 	public R<?> permissions(){
         LoginUser user = currentUser.getLoginUser();
-		Set<String> set = sysMenuService.getUserPermissions(user);
+		Set<String> set = sysMenuService.getUserPermissions(user.getId(), user.getIsAdmin());
 		return R.ok(set);
 	}
 

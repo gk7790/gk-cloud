@@ -27,6 +27,10 @@ public interface Constant {
      */
     String USER_KEY = "userId";
     /**
+     * admin
+     */
+    String ADMIN = "ADMIN";
+    /**
      * 菜单根节点标识
      */
     Long MENU_ROOT = 0L;

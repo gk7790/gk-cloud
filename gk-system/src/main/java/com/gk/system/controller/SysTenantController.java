@@ -1,4 +1,4 @@
-package com.gk.system.web;
+package com.gk.system.controller;
 
 import com.gk.common.annotation.RequestMap;
 import com.gk.common.annotation.RequiresPermission;
@@ -18,7 +18,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Tag(name = "租户管理")

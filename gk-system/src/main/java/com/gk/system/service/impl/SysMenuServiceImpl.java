@@ -1,11 +1,14 @@
 package com.gk.system.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.gk.common.beans.CurrentUser;
 import com.gk.common.constant.Constant;
 import com.gk.common.core.service.impl.BaseServiceImpl;
 import com.gk.common.exception.ErrorCode;
 import com.gk.common.exception.GkException;
 import com.gk.common.dto.LoginUser;
+import com.gk.common.redis.RedisKeys;
+import com.gk.common.redis.RedisUtils;
 import com.gk.common.utils.ConvertUtils;
 import com.gk.common.utils.HttpContextUtils;
 import com.gk.common.utils.TreeUtils;
@@ -25,10 +28,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +37,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntit
     private final CurrentUser currentUser;
     private final SysRoleMenuService sysRoleMenuService;
     private final SysLanguageService sysLanguageService;
+    private final RedisUtils redisUtils;
 
     @Override
 	public SysMenuDTO get(Long id) {
@@ -118,7 +120,31 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntit
 	}
 
     @Override
-    public Set<String> getUserPermissions(LoginUser user) {
-        return Set.of();
+    public Set<String> getUserPermissions(Long userId, boolean isAdmin) {
+        String redisKey = RedisKeys.getSysLonginKey(Constant.ADMIN, "permissions:" + userId);
+        Set<String> permList = redisUtils.getSet(redisKey, String.class);
+        if (CollectionUtils.isNotEmpty(permList)) {
+            return permList;
+        }
+        //系统管理员，拥有最高权限
+        List<String> permissionsList;
+        if (isAdmin) {
+            permissionsList = baseDao.getPermissionsList();
+        } else {
+            permissionsList = baseDao.getUserPermissionsList(userId);
+        }
+
+        //用户权限列表
+        Set<String> permsSet = new HashSet<>();
+        for (String permissions : permissionsList) {
+            if (StrUtil.isBlank(permissions)) {
+                continue;
+            }
+            permsSet.addAll(Arrays.asList(permissions.trim().split(",")));
+        }
+
+        redisUtils.addSet(redisKey, Collections.singleton(permsSet), TimeUnit.HOURS.toSeconds(5));
+        return permsSet;
     }
+
 }

@@ -1,4 +1,4 @@
-package com.gk.system.web;
+package com.gk.system.controller;
 
 
 import com.gk.common.annotation.RequestMap;

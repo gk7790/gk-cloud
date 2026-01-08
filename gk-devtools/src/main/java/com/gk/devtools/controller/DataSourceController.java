@@ -1,4 +1,4 @@
-package com.gk.devtools.web;
+package com.gk.devtools.controller;
 
 import com.gk.common.page.PageData;
 import com.gk.common.tools.R;

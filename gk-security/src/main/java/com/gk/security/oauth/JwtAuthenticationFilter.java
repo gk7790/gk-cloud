@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,8 +46,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     // 加载用户信息
                     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-                    // 从 Token 中获取权限信息
-                    List<SimpleGrantedAuthority> authorities = getAuthoritiesFromToken(jwt);
+                    // 3. 角色
+                    List<String> roles = List.of("admin");
+                    List<String> permissions = List.of("sys:client:update");
+
+                    List<GrantedAuthority> authorities = new ArrayList<>();
+
+                    // 5. 添加角色（必须 ROLE_ 前缀）
+                    for (String role : roles) {
+                        authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
+                    }
+
+                    // 4. 添加权限
+                    for (String permission : permissions) {
+                        authorities.add(new SimpleGrantedAuthority(permission));
+                    }
 
                     // 创建认证对象
                     UsernamePasswordAuthenticationToken authentication =

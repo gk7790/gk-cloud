@@ -1,4 +1,4 @@
-package com.gk.system.web;
+package com.gk.system.controller;
 
 import com.gk.common.tools.R;
 import com.gk.system.dto.SystemDTO;

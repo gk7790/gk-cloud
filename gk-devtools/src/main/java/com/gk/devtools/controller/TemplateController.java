@@ -1,4 +1,4 @@
-package com.gk.devtools.web;
+package com.gk.devtools.controller;
 
 import cn.hutool.core.map.MapUtil;
 import com.gk.common.exception.GkException;
