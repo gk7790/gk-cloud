@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 * @since 3.0 2026-01-08
 */
 @RestController
-@RequestMapping("zap/zapserver")
+@RequestMapping("zap/server")
 @Tag(name = "Zap服务器")
 @RequiredArgsConstructor
 public class ZapServerController {
@@ -39,7 +39,7 @@ public class ZapServerController {
         @Parameter(name = Constant.ORDER_FIELD, description = "排序字段", in = ParameterIn.QUERY, ref="String") ,
         @Parameter(name = Constant.ORDER, description = "排序方式，可选值(asc、desc)", in = ParameterIn.QUERY, ref="String")
     })
-    @PreAuthorize("hasAuthority('zap:zapserver:page')")
+    @PreAuthorize("hasAuthority('zap:server:page')")
     public R<?> page(@Parameter(hidden = true) @RequestMap DataMap params){
         PageData<ZapServerDTO> page = zapServerService.page(params);
         return R.ok(page);
@@ -47,7 +47,7 @@ public class ZapServerController {
 
     @PostMapping
     @Operation(summary = "保存")
-    @PreAuthorize("hasAuthority('zap:zapserver:save')")
+    @PreAuthorize("hasAuthority('zap:server:save')")
     public R<?> save(@RequestBody ZapServerDTO dto){
         zapServerService.save(dto);
         return R.ok();
@@ -55,7 +55,7 @@ public class ZapServerController {
 
     @PutMapping
     @Operation(summary = "修改")
-    @PreAuthorize("hasAuthority('zap:zapserver:update')")
+    @PreAuthorize("hasAuthority('zap:server:update')")
     public R<?> update(@RequestBody ZapServerDTO dto){
         zapServerService.update(dto);
         return R.ok();
@@ -63,7 +63,7 @@ public class ZapServerController {
 
     @DeleteMapping
     @Operation(summary = "删除")
-    @PreAuthorize("hasAuthority('zap:zapserver:delete')")
+    @PreAuthorize("hasAuthority('zap:server:delete')")
     public R<?> delete(@RequestParam Long id){
         //效验数据
         AssertUtils.isNull(id, "id");
