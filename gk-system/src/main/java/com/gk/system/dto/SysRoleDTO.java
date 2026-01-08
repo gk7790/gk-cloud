@@ -21,6 +21,9 @@ public class SysRoleDTO implements Serializable {
 	@Schema(title = "id")
 	private Long id;
 
+    @Schema(title = "auth")
+    private String auth;
+
 	@Schema(title = "角色名称")
 	private String name;
 

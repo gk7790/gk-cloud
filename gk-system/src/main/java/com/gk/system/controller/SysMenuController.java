@@ -43,14 +43,6 @@ public class SysMenuController {
 		return R.ok(list);
 	}
 
-	@GetMapping("permissions")
-	@Operation(summary = "权限标识")
-	public R<?> permissions(){
-        LoginUser user = currentUser.getLoginUser();
-		Set<String> set = sysMenuService.getUserPermissions(user.getId(), user.getIsAdmin());
-		return R.ok(set);
-	}
-
 	@GetMapping("list")
 	@Operation(summary = "列表")
 	@Parameter(name = "type", description = "菜单类型 0：菜单 1：按钮  null：全部", in = ParameterIn.QUERY)

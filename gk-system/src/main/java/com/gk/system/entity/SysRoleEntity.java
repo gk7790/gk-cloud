@@ -21,6 +21,10 @@ import java.util.Date;
 @TableName("sys_role")
 public class SysRoleEntity extends BaseEntity {
 
+    /**
+     * 角色名称
+     */
+    private String auth;
 	/**
 	 * 角色名称
 	 */

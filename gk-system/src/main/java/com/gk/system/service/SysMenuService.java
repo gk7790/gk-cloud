@@ -45,6 +45,4 @@ public interface SysMenuService extends BaseService<SysMenuEntity> {
 	 * @param pid  父菜单ID
 	 */
 	List<SysMenuDTO> getListPid(Long pid);
-
-    Set<String> getUserPermissions(Long userId, boolean isAdmin);
 }

@@ -2,11 +2,12 @@ package com.gk.security.entity;
 
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class SysUser implements UserDetails {
@@ -24,9 +25,24 @@ public class SysUser implements UserDetails {
     private String realName;
     private Integer gender;
 
+
+    /**
+     * 部门数据权限
+     */
+    private Set<String> roleAuthList;
+    /**
+     * 部门数据权限
+     */
+    private Set<Long> deptIdList;
+    /**
+     * 权限标识
+     */
+    private List<SimpleGrantedAuthority> authorities;
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return authorities;
     }
 
     @Override

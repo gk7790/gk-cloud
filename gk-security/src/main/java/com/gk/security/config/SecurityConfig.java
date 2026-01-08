@@ -43,7 +43,6 @@ import java.util.stream.Collectors;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-
     private final JpaUserDetailsService userDetailsService;
 
     public SecurityConfig(JpaUserDetailsService userDetailsService) {
@@ -161,7 +160,7 @@ public class SecurityConfig {
             userMap.put("id", user.getId());
             userMap.put("username", user.getUsername());
             userMap.put("realName", user.getNickName());
-            userMap.put("roles", List.of("super"));
+            userMap.put("roles", user.getRoleAuthList());
             userMap.put("accessToken", token);
             userMap.put("tokenType", "Bearer");
             userMap.put("expiresIn", 86400);

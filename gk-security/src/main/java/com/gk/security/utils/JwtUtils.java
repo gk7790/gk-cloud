@@ -43,9 +43,9 @@ public class JwtUtils {
         claims.put("tenantId", user.getTenantId());
         claims.put("email", user.getEmail());
         claims.put("realName", user.getRealName());
-        claims.put("authorities", user.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList()));
+        claims.put("admin", user.getSuperAdmin());
+        claims.put("deptId", user.getDeptId());
+        claims.put("roles", user.getRoleAuthList());
 
         return Jwts.builder()
                 .setClaims(claims) // 先设置 claims

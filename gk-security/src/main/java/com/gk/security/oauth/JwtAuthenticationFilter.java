@@ -1,5 +1,6 @@
 package com.gk.security.oauth;
 
+import com.gk.security.service.JpaUserDetailsService;
 import com.gk.security.utils.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,14 +21,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    private final JpaUserDetailsService userDetailsService;
 
-    private final UserDetailsService userDetailsService;
-
-    public JwtAuthenticationFilter(UserDetailsService userDetailsService) {
+    public JwtAuthenticationFilter(JpaUserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
@@ -35,7 +36,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 获取 Token
         String jwt = getJwtFromRequest(request);
-        System.out.println(request.getRequestURL() + ", jwt: " + jwt);
         // 验证 Token
         if (StringUtils.isNotBlank(jwt) && JwtUtils.validateToken(jwt)) {
             try {
@@ -46,25 +46,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     // 加载用户信息
                     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-                    // 3. 角色
-                    List<String> roles = List.of("admin");
-                    List<String> permissions = List.of("sys:client:update");
-
-                    List<GrantedAuthority> authorities = new ArrayList<>();
-
-                    // 5. 添加角色（必须 ROLE_ 前缀）
-                    for (String role : roles) {
-                        authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
-                    }
-
-                    // 4. 添加权限
-                    for (String permission : permissions) {
-                        authorities.add(new SimpleGrantedAuthority(permission));
-                    }
-
                     // 创建认证对象
                     UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
                     // 设置认证详情
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

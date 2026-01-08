@@ -19,6 +19,8 @@
         <module>gk-common</module>
         <module>gk-system</module>
         <module>gk-admin</module>
+        <module>gk-zap</module>
+        <module>gk-quartz</module>
         <module>gk-security</module>
         <module>gk-devtools</module>
     </modules>

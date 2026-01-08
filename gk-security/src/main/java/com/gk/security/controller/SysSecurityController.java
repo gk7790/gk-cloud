@@ -1,6 +1,10 @@
 package com.gk.security.controller;
 
+import com.gk.common.beans.CurrentUser;
+import com.gk.common.dto.LoginUser;
 import com.gk.common.tools.R;
+import com.gk.security.service.JpaUserDetailsService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -11,12 +15,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/auth")
 @Tag(name = "部门管理")
 @AllArgsConstructor
 public class SysSecurityController {
+    private final JpaUserDetailsService jpaUserDetailsService;
+    private final CurrentUser currentUser;
+
     /**
      * 登录页面
      */
@@ -67,6 +75,14 @@ public class SysSecurityController {
             model.addAttribute("authorities", authentication.getAuthorities());
         }
         return "home";
+    }
+
+    @GetMapping("permissions")
+    @Operation(summary = "权限标识")
+    public R<?> permissions(){
+        LoginUser user = currentUser.getLoginUser();
+        Set<String> set = jpaUserDetailsService.getUserPermissions(user.getId(), user.getIsAdmin());
+        return R.ok(set);
     }
 
     /**

@@ -119,32 +119,4 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntit
 		sysLanguageService.saveOrUpdate("sys_menu", tableId, fieldName, fieldValue, HttpContextUtils.getLanguage());
 	}
 
-    @Override
-    public Set<String> getUserPermissions(Long userId, boolean isAdmin) {
-        String redisKey = RedisKeys.getSysLonginKey(Constant.ADMIN, "permissions:" + userId);
-        Set<String> permList = redisUtils.getSet(redisKey, String.class);
-        if (CollectionUtils.isNotEmpty(permList)) {
-            return permList;
-        }
-        //系统管理员，拥有最高权限
-        List<String> permissionsList;
-        if (isAdmin) {
-            permissionsList = baseDao.getPermissionsList();
-        } else {
-            permissionsList = baseDao.getUserPermissionsList(userId);
-        }
-
-        //用户权限列表
-        Set<String> permsSet = new HashSet<>();
-        for (String permissions : permissionsList) {
-            if (StrUtil.isBlank(permissions)) {
-                continue;
-            }
-            permsSet.addAll(Arrays.asList(permissions.trim().split(",")));
-        }
-
-        redisUtils.addSet(redisKey, Collections.singleton(permsSet), TimeUnit.HOURS.toSeconds(5));
-        return permsSet;
-    }
-
 }

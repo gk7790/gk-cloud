@@ -21,11 +21,6 @@ public interface SysRoleDataScopeDao extends BaseDao<SysRoleDataScopeEntity> {
     List<Long> getDeptIdList(Long roleId);
 
     /**
-     * 获取用户的部门数据权限列表
-     */
-    List<Long> getDataScopeList(Long userId);
-
-    /**
      * 根据角色id，删除角色数据权限关系
      * @param roleIds 角色ids
      */
