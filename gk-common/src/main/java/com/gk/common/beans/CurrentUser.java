@@ -1,6 +1,6 @@
 package com.gk.common.beans;
 
-import com.gk.common.dto.LoginUser;
+import com.gk.common.dto.AuthUser;
 
 public interface CurrentUser {
 
@@ -32,5 +32,5 @@ public interface CurrentUser {
     /**
      * 登入用户信息
      */
-    LoginUser getLoginUser();
+    AuthUser getAuthUser();
 }

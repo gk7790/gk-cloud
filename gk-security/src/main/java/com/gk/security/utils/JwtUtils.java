@@ -4,8 +4,6 @@ import com.gk.security.entity.SysUser;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.oauth2.jwt.Jwt;
 
@@ -16,8 +14,14 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
+/**
+ * JWT 生成token需要有固定的key
+ * setSubject: 模块(admin, zap, relay)
+ * userId: 用户id
+ * uname: 用户账户
+ * 其他根据各个模块自定义
+ */
 @Slf4j
 public class JwtUtils {
 
@@ -55,6 +59,17 @@ public class JwtUtils {
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
+    }
+
+    /**
+     * 生成 JWT Token
+     */
+    public static String generateToken(String subject, Map<String, Object> claims) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + expiration);
+        return Jwts.builder().setClaims(claims).setIssuer("gk-cloud")
+                .setSubject(subject).setIssuedAt(now).setExpiration(expiryDate)
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
 
     /**
@@ -96,13 +111,20 @@ public class JwtUtils {
         }
     }
 
+    /**
+     * 从 Token 中获取模块
+     */
+    public static String getSubject(String token) {
+        Claims claims = parseToken(token);
+        return claims.getSubject();
+    }
 
     /**
      * 从 Token 中获取用户名
      */
-    public static String getUsernameFromToken(String token) {
+    public static String getUnameFromToken(String token) {
         Claims claims = parseToken(token);
-        return claims.getSubject();
+        return claims.get("uname", String.class);
     }
 
     /**

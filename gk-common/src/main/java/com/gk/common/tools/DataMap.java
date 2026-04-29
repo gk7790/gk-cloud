@@ -41,6 +41,14 @@ public class DataMap extends HashMap<String, Object> {
         return MapUtil.getInt(this, key, defaultValue);
     }
 
+    public Boolean getBool(Object key) {
+        return MapUtil.getBool(this, key);
+    }
+
+    public Boolean getBool(Object key, Boolean defaultValue) {
+        return MapUtil.getBool(this, key, defaultValue);
+    }
+
     public Double getDouble(Object key) {
         return MapUtil.getDouble(this, key, 0.0);
     }

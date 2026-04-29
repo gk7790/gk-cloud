@@ -88,9 +88,10 @@ public class SecurityConfig {
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
         // 配置 JSON 登录过滤器
         return http.authorizeHttpRequests(authorize ->authorize.requestMatchers(
-                        "/auth/**",           // 认证相关端点
-                        "/error",            // 错误端点
-                        "/.well-known/**"    // OIDC发现端点
+                        "/auth/**", // 认证相关端点
+                        "/error", // 错误端点
+                        "/static/**",
+                        "/.well-known/**" // OIDC发现端点
                         ).permitAll().anyRequest().authenticated()
                 )
                 // 禁用CSRF - 前后端分离通常不需要
@@ -155,7 +156,18 @@ public class SecurityConfig {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setCharacterEncoding("UTF-8");
             SysUser user = (SysUser) authentication.getPrincipal();
-            String token = JwtUtils.generateToken(user);
+            // 构建 claims
+            Map<String, Object> claims = new HashMap<>();
+            claims.put("userId", user.getId());
+            claims.put("tenantId", user.getTenantId());
+            claims.put("uname", user.getUsername());
+            claims.put("email", user.getEmail());
+            claims.put("realName", user.getRealName());
+            claims.put("admin", user.getSuperAdmin());
+            claims.put("deptId", user.getDeptId());
+            claims.put("roles", user.getRoleAuthList());
+            String token = JwtUtils.generateToken("admin", claims);
+
             Map<String, Object> userMap = new HashMap<>();
             userMap.put("id", user.getId());
             userMap.put("username", user.getUsername());

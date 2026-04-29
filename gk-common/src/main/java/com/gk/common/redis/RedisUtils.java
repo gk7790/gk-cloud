@@ -139,6 +139,7 @@ public class RedisUtils {
     public void addSet(String key, Object... values) {
         if (ArrayUtils.isNotEmpty(values)) {
             redisTemplate.opsForSet().add(key, values);
+            expire(key, DEFAULT_EXPIRE);
         }
     }
 
@@ -147,13 +148,21 @@ public class RedisUtils {
             return;
         }
 
-        redisTemplate.opsForSet().add(key, values.toArray());
+        Object[] array = values.stream()
+                .filter(Objects::nonNull)
+                .toArray();
+
+        // 关键：过滤 null 后可能为空
+        if (array.length == 0) {
+            return;
+        }
+
+        redisTemplate.opsForSet().add(key, array);
 
         if (expire != NOT_EXPIRE) {
             expire(key, expire);
         }
     }
-
 
     /**
      * 添加 set
@@ -167,11 +176,14 @@ public class RedisUtils {
      */
     public <T> Set<T> getSet(String key, Class<T> clazz) {
         Set<Object> members = getSetObject(key);
-        if (members == null) {
+        if (members == null || members.isEmpty()) {
             return Collections.emptySet();
         }
-        return members.stream().filter(clazz::isInstance)
-                .map(clazz::cast).collect(Collectors.toSet());
+        return members.stream()
+                .filter(Objects::nonNull)
+                .map(item -> ConvertUtils.sourceToTarget(item, clazz))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     /**

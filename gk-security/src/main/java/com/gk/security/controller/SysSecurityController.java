@@ -1,7 +1,7 @@
 package com.gk.security.controller;
 
 import com.gk.common.beans.CurrentUser;
-import com.gk.common.dto.LoginUser;
+import com.gk.common.dto.AuthUser;
 import com.gk.common.tools.R;
 import com.gk.security.service.JpaUserDetailsService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -80,8 +80,8 @@ public class SysSecurityController {
     @GetMapping("permissions")
     @Operation(summary = "权限标识")
     public R<?> permissions(){
-        LoginUser user = currentUser.getLoginUser();
-        Set<String> set = jpaUserDetailsService.getUserPermissions(user.getId(), user.getIsAdmin());
+        AuthUser user = currentUser.getAuthUser();
+        Set<String> set = jpaUserDetailsService.getUserPermissions(user.getId(), user.isSAdmin());
         return R.ok(set);
     }
 

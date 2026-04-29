@@ -2,11 +2,10 @@ package com.gk.security.utils;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.gk.common.beans.CurrentUser;
-import com.gk.common.constant.Constant;
-import com.gk.common.dto.LoginUser;
+import com.gk.common.dto.AuthUser;
 import com.gk.common.enums.SysEnum;
-import com.gk.common.utils.ConvertUtils;
 import com.gk.security.entity.SysUser;
+import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,7 +27,7 @@ public class SecurityUtils implements CurrentUser {
      * 获取当前用户ID
      */
     public Long getUserId() {
-        SysUser user = getCurrentUser();
+        AuthUser user = getAuthUser();
         return user != null ? user.getId() : null;
     }
 
@@ -44,7 +43,7 @@ public class SecurityUtils implements CurrentUser {
      * 获取当前部门ID
      */
     public Long getDeptId() {
-        SysUser user = getCurrentUser();
+        AuthUser user = getAuthUser();
         return user != null ? user.getDeptId() : null;
     }
 
@@ -52,7 +51,7 @@ public class SecurityUtils implements CurrentUser {
      * 获取当前租户ID
      */
     public Long getTenantId() {
-        SysUser user = getCurrentUser();
+        AuthUser user = getAuthUser();
         return user != null ? user.getTenantId() : null;
     }
 
@@ -89,34 +88,28 @@ public class SecurityUtils implements CurrentUser {
      * 是否是管理员
      */
     public boolean isAdmin() {
-        SysUser user = getCurrentUser();
-        return user.isSuperAdmin();
-    }
-
-    @Override
-    public LoginUser getLoginUser() {
-        SysUser currentUser = getCurrentUser();
-        LoginUser loginUser = ConvertUtils.sourceToTarget(currentUser, LoginUser.class);
-        loginUser.setIsAdmin(currentUser.isSuperAdmin());
-        return loginUser;
+        AuthUser user = getAuthUser();
+        return user.isSAdmin();
     }
 
     /**
      * 获取当前登录用户
      */
-    public SysUser getCurrentUser() {
+    public AuthUser getAuthUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         if (authentication == null
                 || !authentication.isAuthenticated()
                 || authentication instanceof AnonymousAuthenticationToken) {
             return null;
         }
-
-        if (authentication.getPrincipal() instanceof SysUser) {
-            return (SysUser) authentication.getPrincipal();
+        if (authentication.getPrincipal() instanceof SysUser principal) {
+            return principal.toAuthUser();
+        } else if (authentication.getPrincipal() instanceof AuthUser) {
+            Object principal = authentication.getPrincipal();
+            return (AuthUser) principal;
+        } else if (authentication.getPrincipal() instanceof Claims claims) {
+            return AuthUser.fromObject(claims);
         }
-
         return null;
     }
 
@@ -124,11 +117,11 @@ public class SecurityUtils implements CurrentUser {
      * 获取当前登录用户
      */
     public void setDeptAndTenant(Map<String, Object> params) {
-        SysUser currentUser = getCurrentUser();
-        if (ObjectUtil.isNotEmpty(params) && currentUser.getSuperAdmin() == SysEnum.sAdmin.NO.value()) {
-            Optional<Long> dept = Optional.of(currentUser).map(SysUser::getDeptId);
+        AuthUser user = getAuthUser();
+        if (ObjectUtil.isNotEmpty(params) && user.getSAdmin() == SysEnum.sAdmin.NO.value()) {
+            Optional<Long> dept = Optional.of(user).map(AuthUser::getDeptId);
             dept.ifPresent(aLong -> params.put("deptId", aLong));
-            Optional<Long> tenant = Optional.of(currentUser).map(SysUser::getTenantId);
+            Optional<Long> tenant = Optional.of(user).map(AuthUser::getTenantId);
             tenant.ifPresent(aLong -> params.put("tenantId", aLong));
         }
     }
@@ -137,9 +130,9 @@ public class SecurityUtils implements CurrentUser {
      * 获取当前登录用户
      */
     public void setDept(Map<String, Object> params) {
-        SysUser currentUser = getCurrentUser();
-        if (ObjectUtil.isNotEmpty(params) && currentUser.getSuperAdmin() == SysEnum.sAdmin.NO.value()) {
-            Optional<Long> dept = Optional.of(currentUser).map(SysUser::getDeptId);
+        AuthUser user = getAuthUser();
+        if (ObjectUtil.isNotEmpty(params) && user.getSAdmin() == SysEnum.sAdmin.NO.value()) {
+            Optional<Long> dept = Optional.of(user).map(AuthUser::getDeptId);
             dept.ifPresent(aLong -> params.put("deptId", aLong));
         }
     }

@@ -1,7 +1,9 @@
 package com.gk.security.oauth;
 
+import com.gk.security.entity.SysUser;
 import com.gk.security.service.JpaUserDetailsService;
 import com.gk.security.utils.JwtUtils;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,19 +11,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -39,17 +36,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // 验证 Token
         if (StringUtils.isNotBlank(jwt) && JwtUtils.validateToken(jwt)) {
             try {
-                // 从 Token 中获取用户名
-                String username = JwtUtils.getUsernameFromToken(jwt);
-                // 确保用户未认证且用户名有效
-                if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    // 加载用户信息
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                Claims claims = JwtUtils.parseToken(jwt);
+                if ("admin".equals(claims.getSubject())) {
+                    // 从 Token 中获取用户名
+                    String username = JwtUtils.getUnameFromToken(jwt);
+                    // 确保用户未认证且用户名有效
+                    if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                        // 加载用户信息
+                        SysUser userDetails = userDetailsService.loadUserByUsername(username);
+
+                        // 创建认证对象
+                        UsernamePasswordAuthenticationToken authentication =
+                                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+                        // 设置认证详情
+                        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                        // 设置到 SecurityContext
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    }
+                } else {
 
                     // 创建认证对象
-                    UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(claims, null, List.of());
                     // 设置认证详情
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 

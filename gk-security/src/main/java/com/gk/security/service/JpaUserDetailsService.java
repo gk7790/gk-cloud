@@ -14,16 +14,13 @@ import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -33,13 +30,10 @@ public class JpaUserDetailsService implements UserDetailsService {
     private final RedisUtils redisUtils;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public SysUser loadUserByUsername(String username) throws UsernameNotFoundException {
         log.debug("Loading user by username: {}", username);
-        Optional<SysUser> userOpt = securityDao.findByUsername(username);
-        if (userOpt.isEmpty()) {
-            throw new UsernameNotFoundException("User not found");
-        }
-        SysUser user = userOpt.get();
+
+        SysUser user = getByUsername(username);
         validateUser(user);
 
         Set<Long> dataScopeList = getDataScopeList(user.getId());
@@ -77,20 +71,39 @@ public class JpaUserDetailsService implements UserDetailsService {
 
     /**
      * 获取用户对应的部门数据权限
+     * @param uname  用户uname
+     * @return 返回部门ID列表
+     */
+    public SysUser getByUsername(String uname) {
+        String redisKey = RedisKeys.getSysLonginKey(Constant.ADMIN, "auth-user:" + uname);
+        SysUser idList = redisUtils.get(redisKey, SysUser.class);
+        if (ObjectUtils.isNotEmpty(idList)) {
+            return idList;
+        }
+
+        Optional<SysUser> userOpt = securityDao.findByUsername(uname);
+        if (userOpt.isEmpty()) {
+            throw new UsernameNotFoundException("User not found");
+        }
+
+        SysUser sysUser = userOpt.get();
+        redisUtils.set(redisKey, sysUser, TimeUnit.HOURS.toSeconds(5));
+        return sysUser;
+    }
+
+    /**
+     * 获取用户对应的部门数据权限
      * @param userId  用户ID
      * @return        返回部门ID列表
      */
     public Set<String> getRoleAuthList(Long userId) {
         String redisKey = RedisKeys.getSysLonginKey(Constant.ADMIN, "role-auth:" + userId);
-        redisUtils.get(redisKey);
         Set<String> idList = redisUtils.getSet(redisKey, String.class);
         if (ObjectUtils.isNotEmpty(idList)) {
             return idList;
         }
         Set<String> scopeList = securityDao.getRoleAuthList(userId);
-        if (ObjectUtils.isNotEmpty(scopeList)) {
-            redisUtils.addSet(redisKey, scopeList, TimeUnit.HOURS.toSeconds(5));
-        }
+        redisUtils.addSet(redisKey, scopeList, TimeUnit.HOURS.toSeconds(5));
         return scopeList;
     }
 
@@ -117,7 +130,7 @@ public class JpaUserDetailsService implements UserDetailsService {
             permsSet.addAll(Arrays.asList(permissions.trim().split(",")));
         }
 
-        redisUtils.addSet(redisKey, Collections.singleton(permsSet), TimeUnit.HOURS.toSeconds(5));
+        redisUtils.addSet(redisKey, permsSet, TimeUnit.HOURS.toSeconds(5));
         return permsSet;
     }
 
@@ -128,15 +141,12 @@ public class JpaUserDetailsService implements UserDetailsService {
      */
     public Set<Long> getDataScopeList(Long userId) {
         String redisKey = RedisKeys.getSysLonginKey(Constant.ADMIN, "dataScope:" + userId);
-        redisUtils.get(redisKey);
         Set<Long> idList = redisUtils.getSet(redisKey, Long.class);
         if (ObjectUtils.isNotEmpty(idList)) {
             return idList;
         }
         Set<Long> scopeList = securityDao.getDataScopeList(userId);
-        if (ObjectUtils.isNotEmpty(scopeList)) {
-            redisUtils.addSet(redisKey, scopeList, TimeUnit.HOURS.toSeconds(5));
-        }
+        redisUtils.addSet(redisKey, scopeList, TimeUnit.HOURS.toSeconds(5));
         return scopeList;
     }
 }

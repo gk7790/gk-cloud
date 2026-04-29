@@ -2,12 +2,11 @@ package com.gk.system.service;
 
 
 import com.gk.common.core.service.BaseService;
-import com.gk.common.dto.LoginUser;
+import com.gk.common.dto.AuthUser;
 import com.gk.system.dto.SysMenuDTO;
 import com.gk.system.entity.SysMenuEntity;
 
 import java.util.List;
-import java.util.Set;
 
 
 /**
@@ -38,7 +37,7 @@ public interface SysMenuService extends BaseService<SysMenuEntity> {
 	 * @param user  用户
 	 * @param typeList 菜单类型
 	 */
-	List<SysMenuDTO> getUserMenuList(LoginUser user, List<Integer> typeList);
+	List<SysMenuDTO> getUserMenuList(AuthUser user, List<Integer> typeList);
 
 	/**
 	 * 根据父菜单，查询子菜单

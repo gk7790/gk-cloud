@@ -3,9 +3,9 @@ package com.gk.system.controller;
 
 import com.gk.common.annotation.RequiresPermission;
 import com.gk.common.beans.CurrentUser;
+import com.gk.common.dto.AuthUser;
 import com.gk.common.enums.SysEnum;
 import com.gk.common.exception.ErrorCode;
-import com.gk.common.dto.LoginUser;
 import com.gk.common.tools.R;
 import com.gk.common.utils.ConvertUtils;
 import com.gk.common.validator.AssertUtils;
@@ -20,7 +20,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * 菜单管理
@@ -38,7 +37,7 @@ public class SysMenuController {
 	@GetMapping("nav")
 	@Operation(summary = "导航")
 	public R<?> nav(){
-        LoginUser user = currentUser.getLoginUser();
+        AuthUser user = currentUser.getAuthUser();
 		List<SysMenuDTO> list = sysMenuService.getUserMenuList(user, SysEnum.MenuType.enums());
 		return R.ok(list);
 	}
@@ -105,7 +104,7 @@ public class SysMenuController {
 	@Operation(summary = "角色菜单权限")
 	@RequiresPermission("sys:menu:select")
 	public R<?> select(){
-        LoginUser user = currentUser.getLoginUser();
+        AuthUser user = currentUser.getAuthUser();
 		List<SysMenuDTO> list = sysMenuService.getUserMenuList(user, null);
 		return R.ok(list);
 	}

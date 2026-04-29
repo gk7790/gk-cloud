@@ -1,5 +1,6 @@
 package com.gk.security.entity;
 
+import com.gk.common.dto.AuthUser;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,9 +26,12 @@ public class SysUser implements UserDetails {
     private String realName;
     private Integer gender;
 
-
     /**
-     * 部门数据权限
+     * 模块: admin(管理后台用户), zap(内网穿透用户), relay(节点客户端用户)
+     */
+    private String sub;
+    /**
+     *部门数据权限
      */
     private Set<String> roleAuthList;
     /**
@@ -38,7 +42,6 @@ public class SysUser implements UserDetails {
      * 权限标识
      */
     private List<SimpleGrantedAuthority> authorities;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -57,5 +60,19 @@ public class SysUser implements UserDetails {
 
     public boolean isSuperAdmin() {
         return superAdmin == 1;
+    }
+
+    public AuthUser toAuthUser() {
+        AuthUser authUser = new AuthUser();
+        authUser.setId(this.id);
+        authUser.setTenantId(this.tenantId);
+        authUser.setDeptId(this.deptId);
+        authUser.setUName(this.username);
+        authUser.setNickName(nickName);
+        authUser.setEmail(email);
+        authUser.setSAdmin(this.superAdmin);
+        authUser.setDeptIdList(deptIdList);
+        authUser.setRoleAuthList(roleAuthList);
+        return authUser;
     }
 }

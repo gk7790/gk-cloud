@@ -2,11 +2,11 @@ package com.gk.system.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.gk.common.core.service.impl.BaseServiceImpl;
+import com.gk.common.dto.AuthUser;
 import com.gk.common.enums.SysEnum;
 import com.gk.common.page.PageData;
 import com.gk.common.password.PasswordUtils;
 import com.gk.common.utils.ConvertUtils;
-import com.gk.security.entity.SysUser;
 import com.gk.security.utils.SecurityUtils;
 import com.gk.system.dao.SysUserDao;
 import com.gk.system.dto.SysUserDTO;
@@ -17,7 +17,6 @@ import com.gk.system.service.SysUserPostService;
 import com.gk.system.service.SysUserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,8 +55,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
 		IPage<SysUserEntity> page = getPage(params, "t1.created_at", false);
 
         //普通管理员，只能查询所属部门及子部门的数据
-        SysUser user = securityUtils.getCurrentUser();
-        if (user.getSuperAdmin() == SysEnum.sAdmin.NO.value()) {
+        AuthUser user = securityUtils.getAuthUser();
+        if (user.isSAdmin()) {
             params.put("deptIdList", sysDeptService.getSubDeptIdList(user.getDeptId()));
 			params.put("selfId", user.getId());
         }
@@ -71,8 +70,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
 	@Override
 	public List<SysUserDTO> list(Map<String, Object> params) {
 		//普通管理员，只能查询所属部门及子部门的数据
-        SysUser user = securityUtils.getCurrentUser();
-        if (user.getSuperAdmin() == SysEnum.sAdmin.NO.value()) {
+        AuthUser user = securityUtils.getAuthUser();
+        if (user.isSAdmin()) {
             params.put("deptIdList", sysDeptService.getSubDeptIdList(user.getDeptId()));
             params.put("selfId", user.getId());
         }

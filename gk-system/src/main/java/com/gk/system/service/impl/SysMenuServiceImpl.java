@@ -1,13 +1,11 @@
 package com.gk.system.service.impl;
 
-import cn.hutool.core.util.StrUtil;
 import com.gk.common.beans.CurrentUser;
 import com.gk.common.constant.Constant;
 import com.gk.common.core.service.impl.BaseServiceImpl;
+import com.gk.common.dto.AuthUser;
 import com.gk.common.exception.ErrorCode;
 import com.gk.common.exception.GkException;
-import com.gk.common.dto.LoginUser;
-import com.gk.common.redis.RedisKeys;
 import com.gk.common.redis.RedisUtils;
 import com.gk.common.utils.ConvertUtils;
 import com.gk.common.utils.HttpContextUtils;
@@ -15,21 +13,15 @@ import com.gk.common.utils.TreeUtils;
 import com.gk.common.utils.ValueUtils;
 import com.gk.system.dao.SysMenuDao;
 import com.gk.system.dto.SysMenuDTO;
-import com.gk.system.dto.SysMenuMeta;
 import com.gk.system.entity.SysMenuEntity;
 import com.gk.system.service.SysLanguageService;
 import com.gk.system.service.SysMenuService;
 import com.gk.system.service.SysRoleMenuService;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -93,11 +85,11 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntit
 	}
 
 	@Override
-	public List<SysMenuDTO> getUserMenuList(LoginUser user, List<Integer> typeList) {
+	public List<SysMenuDTO> getUserMenuList(AuthUser user, List<Integer> typeList) {
 		List<SysMenuEntity> menuList;
 
 		//系统管理员，拥有最高权限
-		if(user.getIsAdmin()){
+		if(user.isSAdmin()){
 			menuList = baseDao.getMenuList(typeList, HttpContextUtils.getLanguage());
 		}else {
 			menuList = baseDao.getUserMenuList(currentUser.getUserId(), typeList, HttpContextUtils.getLanguage());
