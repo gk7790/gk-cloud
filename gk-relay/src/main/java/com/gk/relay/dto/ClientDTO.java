@@ -10,11 +10,12 @@ import java.time.LocalDateTime;
 * Relay客户表
 *
 * @author Lowen lowen@gmail.com
-* @since 3.0 2026-04-28
+* @since 3.0 2026-04-30
 */
 @Data
 @Schema(title = "Relay客户表")
-public class RelayClientDTO implements Serializable {
+public class ClientDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Schema(title = "主键ID")
     private Long id;

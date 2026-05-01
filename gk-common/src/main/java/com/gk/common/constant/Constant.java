@@ -133,18 +133,62 @@ public interface Constant {
         PAUSE(2, "暂停"),
         STOP(3, "停用");
 
-        private final int status;
+        private final int value;
         private final String label;
 
-        Status(int status, String label) {
-            this.status = status;
+        Status(int value, String label) {
+            this.value = value;
             this.label = label;
         }
 
         public static List<Integer> defaultStatus() {
-            return List.of(NORMAL.status, PAUSE.status);
+            return List.of(NORMAL.value, PAUSE.value);
         }
     }
+
+    /**
+     * 会员人设状态
+     */
+    @Getter
+    enum Enabled {
+        ENABLE(1, "启用"),
+        DISABLE(0, "禁用");
+
+        private final int value;
+        private final String label;
+
+        Enabled(int value, String label) {
+            this.value = value;
+            this.label = label;
+        }
+
+        public static boolean isEnabled(Integer value) {
+            return value != null && value == ENABLE.value;
+        }
+    }
+
+    /**
+     * 逻辑删除
+     */
+    @Getter
+    enum Deleted {
+        NORMAL(0, "正常"),
+        DISABLE(1, "删除");
+
+        private final int value;
+        private final String label;
+
+        Deleted(int value, String label) {
+            this.value = value;
+            this.label = label;
+        }
+
+        public static int normal() {
+            return NORMAL.value;
+        }
+    }
+
+
 
     /**
      * 定时任务状态

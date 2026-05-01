@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gk.relay.dao.NodeInboundDao">
+
+    <resultMap type="com.gk.relay.entity.NodeInboundEntity" id="nodeInboundMap">
+        <result property="id" column="id"/>
+        <result property="nodeId" column="node_id"/>
+        <result property="protocol" column="protocol"/>
+        <result property="enabled" column="enabled"/>
+        <result property="inboundName" column="inbound_name"/>
+        <result property="inboundTag" column="inbound_tag"/>
+        <result property="listenAddr" column="listen_addr"/>
+        <result property="listenPort" column="listen_port"/>
+        <result property="transportType" column="transport_type"/>
+        <result property="network" column="network"/>
+        <result property="flow" column="flow"/>
+        <result property="tlsEnabled" column="tls_enabled"/>
+        <result property="tlsMode" column="tls_mode"/>
+        <result property="sniffEnabled" column="sniff_enabled"/>
+        <result property="sniffOverrideDestination" column="sniff_override_destination"/>
+        <result property="udpEnabled" column="udp_enabled"/>
+        <result property="tcpFastOpen" column="tcp_fast_open"/>
+        <result property="protocolOptions" column="protocol_options"/>
+        <result property="transportOptions" column="transport_options"/>
+        <result property="remark" column="remark"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedBy" column="updated_by"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="deleted" column="deleted"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+</mapper>

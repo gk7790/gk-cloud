@@ -10,13 +10,12 @@ import com.gk.common.core.entity.SimpleEntity;
  * Relay客户表
  *
  * @author Lowen lowen@gmail.com
- * @since 3.0 2026-04-28
+ * @since 3.0 2026-04-30
  */
 @Data
 @EqualsAndHashCode(callSuper=false)
 @TableName("relay_client")
-public class RelayClientEntity extends SimpleEntity {
-	private static final long serialVersionUID = 1L;
+public class ClientEntity extends SimpleEntity {
 
 	/**
 	* 租户ID，单租户默认0
@@ -43,13 +42,9 @@ public class RelayClientEntity extends SimpleEntity {
 	*/
 	private String phone;
 	/**
-	* 密码hash
+	* 密码
 	*/
-	private String passwordHash;
-	/**
-	* 密码盐
-	*/
-	private String salt;
+	private String password;
 	/**
 	* 客户类型：1普通客户，2测试客户，3企业客户，4内部客户
 	*/

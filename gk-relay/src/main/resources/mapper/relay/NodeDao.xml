@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gk.relay.dao.NodeDao">
+
+    <resultMap type="com.gk.relay.entity.NodeEntity" id="nodeMap">
+        <result property="id" column="id"/>
+        <result property="tenantId" column="tenant_id"/>
+        <result property="nodeCode" column="node_code"/>
+        <result property="nodeName" column="node_name"/>
+        <result property="regionCode" column="region_code"/>
+        <result property="regionName" column="region_name"/>
+        <result property="countryCode" column="country_code"/>
+        <result property="cityName" column="city_name"/>
+        <result property="status" column="status"/>
+        <result property="onlineStatus" column="online_status"/>
+        <result property="provider" column="provider"/>
+        <result property="serverHost" column="server_host"/>
+        <result property="publicIp" column="public_ip"/>
+        <result property="ipv6Addr" column="ipv6_addr"/>
+        <result property="sshHost" column="ssh_host"/>
+        <result property="sshPort" column="ssh_port"/>
+        <result property="logLevel" column="log_level"/>
+        <result property="routeFinalOutboundTag" column="route_final_outbound_tag"/>
+        <result property="weight" column="weight"/>
+        <result property="sortOrder" column="sort_order"/>
+        <result property="maxClients" column="max_clients"/>
+        <result property="maxConnections" column="max_connections"/>
+        <result property="bandwidthLimitMbps" column="bandwidth_limit_mbps"/>
+        <result property="currentConfigVersion" column="current_config_version"/>
+        <result property="appliedConfigVersion" column="applied_config_version"/>
+        <result property="configApplyStatus" column="config_apply_status"/>
+        <result property="configApplyError" column="config_apply_error"/>
+        <result property="remark" column="remark"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedBy" column="updated_by"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="deleted" column="deleted"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <select id="getNodeByClient" resultType="com.gk.relay.dto.NodeDTO">
+        SELECT n.id, n.node_code, n.node_name, n.region_code, n.region_name, n.country_code,
+                n.city_name, n.online_status, n.`status`, n.provider, n.public_ip
+        FROM relay_node AS n
+            LEFT JOIN relay_group_node AS an ON n.id = an.node_id
+            LEFT JOIN relay_group_client AS ac ON an.group_id = ac.group_id
+            LEFT JOIN relay_group ag ON ag.id = ac.group_id
+        WHERE ac.enabled = 1 AND an.enabled = 1 and ag.`status` = '1'
+            AND ac.client_id = #{id}
+        GROUP BY n.id
+    </select>
+
+</mapper>

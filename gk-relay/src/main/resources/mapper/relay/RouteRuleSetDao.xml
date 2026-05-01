@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gk.relay.dao.RouteRuleSetDao">
+
+    <resultMap type="com.gk.relay.entity.RouteRuleSetEntity" id="routeRuleSetMap">
+        <result property="id" column="id"/>
+        <result property="ruleSetName" column="rule_set_name"/>
+        <result property="ruleSetTag" column="rule_set_tag"/>
+        <result property="setType" column="set_type"/>
+        <result property="formatType" column="format_type"/>
+        <result property="category" column="category"/>
+        <result property="dataKind" column="data_kind"/>
+        <result property="path" column="path"/>
+        <result property="url" column="url"/>
+        <result property="updateInterval" column="update_interval"/>
+        <result property="httpClientTag" column="http_client_tag"/>
+        <result property="inlineRules" column="inline_rules"/>
+        <result property="ruleCount" column="rule_count"/>
+        <result property="fileHash" column="file_hash"/>
+        <result property="versionNo" column="version_no"/>
+        <result property="enabled" column="enabled"/>
+        <result property="systemBuiltin" column="system_builtin"/>
+        <result property="editable" column="editable"/>
+        <result property="sourceName" column="source_name"/>
+        <result property="remark" column="remark"/>
+        <result property="rawJson" column="raw_json"/>
+        <result property="extraJson" column="extra_json"/>
+        <result property="deleted" column="deleted"/>
+    </resultMap>
+
+    <select id="listActiveByPolicyId" resultType="com.gk.relay.entity.RouteRuleSetEntity">
+        SELECT * FROM relay_route_rule_set rrs WHERE rrs.enabled = 1
+    </select>
+
+    <select id="mapActiveByTags" resultType="com.gk.relay.entity.RouteRuleSetEntity">
+        SELECT * FROM relay_route_rule_set rrs WHERE rrs.enabled = 1 AND rrs.deleted = 0
+        <if test="ruleSetTags != null">
+            AND rrs.rule_set_tag in
+            <foreach item="tag" collection="ruleSetTags" open="(" separator="," close=")">
+                #{tag}
+            </foreach>
+        </if>
+    </select>
+
+</mapper>

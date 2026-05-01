@@ -4,6 +4,7 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 
@@ -222,6 +223,44 @@ public class StringFormat {
         } else {
             return false;
         }
+    }
+
+    /**
+     * 将数据转成 List<String>
+     * @param value 数据
+     * @return 返回 String 集合
+     */
+    public static List<String> toStringList(Object value) {
+        List<String> result = new ArrayList<>();
+
+        if (value == null) {
+            return result;
+        }
+
+        if (value instanceof String str) {
+            result.add(str);
+            return result;
+        }
+
+        if (value instanceof JSONArray array) {
+            for (Object item : array) {
+                if (item != null) {
+                    result.add(String.valueOf(item));
+                }
+            }
+            return result;
+        }
+
+        if (value instanceof Collection<?> collection) {
+            for (Object item : collection) {
+                if (item != null) {
+                    result.add(String.valueOf(item));
+                }
+            }
+            return result;
+        }
+
+        throw new IllegalArgumentException("无法转换为字符串数组: " + value);
     }
 
 }

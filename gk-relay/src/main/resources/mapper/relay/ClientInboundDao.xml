@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gk.relay.dao.ClientInboundDao">
+
+    <resultMap type="com.gk.relay.entity.ClientInboundEntity" id="clientInboundMap">
+        <result property="id" column="id"/>
+        <result property="clientId" column="client_id"/>
+        <result property="inboundTag" column="inbound_tag"/>
+        <result property="inboundName" column="inbound_name"/>
+        <result property="inboundType" column="inbound_type"/>
+        <result property="listenAddr" column="listen_addr"/>
+        <result property="listenPort" column="listen_port"/>
+        <result property="sniffEnabled" column="sniff_enabled"/>
+        <result property="udpEnabled" column="udp_enabled"/>
+        <result property="tunEnabled" column="tun_enabled"/>
+        <result property="tunStack" column="tun_stack"/>
+        <result property="tunAutoRoute" column="tun_auto_route"/>
+        <result property="tunStrictRoute" column="tun_strict_route"/>
+        <result property="inboundOptions" column="inbound_options"/>
+        <result property="enabled" column="enabled"/>
+        <result property="remark" column="remark"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedBy" column="updated_by"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="deleted" column="deleted"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+</mapper>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gk.relay.dao.RoutePolicyDao">
+
+    <resultMap type="com.gk.relay.entity.RoutePolicyEntity" id="routePolicyMap">
+        <result property="id" column="id"/>
+        <result property="policyName" column="policy_name"/>
+        <result property="policyCode" column="policy_code"/>
+        <result property="description" column="description"/>
+        <result property="finalOutbound" column="final_outbound"/>
+        <result property="autoDetectInterface" column="auto_detect_interface"/>
+        <result property="defaultHttpClientTag" column="default_http_client_tag"/>
+        <result property="defaultDomainResolver" column="default_domain_resolver"/>
+        <result property="defaultNetworkStrategy" column="default_network_strategy"/>
+        <result property="defaultInterface" column="default_interface"/>
+        <result property="cacheFileEnabled" column="cache_file_enabled"/>
+        <result property="cacheFilePath" column="cache_file_path"/>
+        <result property="cacheFileJson" column="cache_file_json"/>
+        <result property="enabled" column="enabled"/>
+        <result property="systemBuiltin" column="system_builtin"/>
+        <result property="editable" column="editable"/>
+        <result property="versionNo" column="version_no"/>
+        <result property="extraJson" column="extra_json"/>
+        <result property="sortOrder" column="sort_order"/>
+        <result property="deleted" column="deleted"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedBy" column="updated_by"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+</mapper>

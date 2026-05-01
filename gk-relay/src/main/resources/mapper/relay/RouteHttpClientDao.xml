@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gk.relay.dao.RouteHttpClientDao">
+
+    <resultMap type="com.gk.relay.entity.RouteHttpClientEntity" id="routeHttpClientMap">
+        <result property="id" column="id"/>
+        <result property="clientName" column="client_name"/>
+        <result property="clientTag" column="client_tag"/>
+        <result property="detourOutbound" column="detour_outbound"/>
+        <result property="enabled" column="enabled"/>
+        <result property="systemBuiltin" column="system_builtin"/>
+        <result property="editable" column="editable"/>
+        <result property="rawJson" column="raw_json"/>
+        <result property="extraJson" column="extra_json"/>
+        <result property="deleted" column="deleted"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedBy" column="updated_by"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+</mapper>
